@@ -1,0 +1,5 @@
+content_id,box_id,content_type,content_data,created_at
+1,1,text,This is some text content,2024-09-10 12:03:18.068217
+2,2,audio,path/to/audio/file.mp3,2024-09-10 12:03:18.068218
+3,2,image,path/to/image/file.jpg,2024-09-10 12:03:18.068219
+4,3,text,Another text content,2024-09-10 12:03:18.068220

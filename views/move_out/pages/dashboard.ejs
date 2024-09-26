@@ -1,0 +1,23 @@
+<%- include("./../partials/header.ejs") %>
+
+<div class="dashboard-dashboard-container">
+  <h1>Welcome, <%= user.name %>!</h1>
+  <p>Manage your moving boxes and profile here.</p>
+
+  <div class="dashboard-dashboard-actions">
+    <a href="/move_out/create-box" class="dashboard-btn dashboard-btn-primary">Create New Box</a>
+    <a href="/move_out/view-boxes" class="dashboard-btn dashboard-btn-secondary">View My Boxes</a>
+    <a href="/move_out/profile" class="dashboard-btn dashboard-btn-tertiary">Edit Profile</a>
+  </div>
+
+  <div class="dashboard-profile-summary">
+    <h2>Your Profile</h2>
+    <p><strong>Name:</strong> <%= user.name %></p>
+    <p><strong>Email:</strong> <%= user.email %></p>
+    <p><strong>Number of Boxes:</strong> <%= user.boxCount %></p>
+  </div>
+  
+  <a href="/move_out/logout" class="dashboard-btn dashboard-btn-danger">Logout</a>
+</div>
+
+<%- include("./../partials/footer.ejs") %>

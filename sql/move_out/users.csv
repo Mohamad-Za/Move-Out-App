@@ -1,0 +1,4 @@
+user_id,email,password,created_at
+1,user1@example.com,password123,2024-09-10 12:03:18.068005
+2,user2@example.com,password456,2024-09-10 12:03:18.068010
+3,user3@example.com,password789,2024-09-10 12:03:18.068011

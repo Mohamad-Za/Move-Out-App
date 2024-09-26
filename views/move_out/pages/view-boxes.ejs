@@ -1,0 +1,58 @@
+<%- include("./../partials/header.ejs") %>
+
+<body class="slide-in">
+    <div class="helix-container">
+        <h2 class="helix-page-title">Your Boxes</h2>
+
+        <% if (boxes.length > 0) { %>
+            <div class="helix-box-grid">
+                <% boxes.forEach(box => { %>
+                    <div class="helix-box-card" style="background-image: url('/images/<%= box.label_design %>.jpg');">
+                        <div class="helix-box-overlay"></div>
+                        <div class="helix-box-content">
+                            <div class="helix-box-header">
+                                <h3 class="helix-box-title"><%= box.box_name %></h3>
+                                <p class="helix-box-description"><%= box.description %></p>
+                            </div>
+
+                            <!-- QR Code -->
+                            <% if (box.qr_code_data) { %>
+                                <div class="helix-qr-code-container">
+                                    <img src="<%= box.qr_code_data %>" alt="QR Code for <%= box.box_name %>" class="helix-qr-code">
+                                </div>
+                            <% } %>
+
+                            <!-- View Details Button -->
+                            <div class="helix-box-actions">
+                                <a href="/move_out/view-box/<%= box.box_id %>" class="helix-btn helix-btn-primary">View Details</a>
+                                <% if (box.qr_code_data) { %>
+                                    <button class="helix-btn helix-btn-secondary" onclick="printQRCode('<%= box.qr_code_data %>')">Print QR Code</button>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        <% } else { %>
+            <p class="helix-no-boxes-message">You haven't created any boxes yet.</p>
+        <% } %>
+
+        <div class="helix-back-to-dashboard">
+            <a href="/move_out/dashboard" class="helix-btn helix-btn-secondary">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <!-- Add script to handle QR code printing -->
+    <script>
+        function printQRCode(qrCodeUrl) {
+            const printWindow = window.open('', '', 'width=600,height=400');
+            printWindow.document.write('<html><head><title>Print QR Code</title></head><body>');
+            printWindow.document.write(`<img src="${qrCodeUrl}" alt="QR Code">`);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        }
+    </script>
+
+<%- include("./../partials/footer.ejs") %>
+</body>

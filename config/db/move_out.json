@@ -1,0 +1,10 @@
+{
+    "host":     "LAPTOP-41P19MFQ.local",
+    "user":     "dbadm",
+    "password": "P@ssw0rd",
+    "database": "moveout_app",
+    "multipleStatements": true,
+    "connectionLimit": 10,
+    "waitForConnections": true,
+    "queueLimit": 0
+}

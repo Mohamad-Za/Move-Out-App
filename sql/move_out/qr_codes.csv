@@ -1,0 +1,5 @@
+qr_id,box_id,qr_code_data,created_at
+1,1,path/to/qr/code1.png,2024-09-10 12:03:18.068324
+2,2,path/to/qr/code2.png,2024-09-10 12:03:18.068325
+3,3,path/to/qr/code3.png,2024-09-10 12:03:18.068326
+4,4,path/to/qr/code4.png,2024-09-10 12:03:18.068327
