@@ -1,0 +1,30 @@
+<%- include("./../partials/header.ejs") %>
+
+<body class="slide-in">
+    <div class="helix-container">
+        <h2 class="page-title">Shared Boxes</h2>
+
+        <% if (sharedBoxes.length > 0) { %>
+            <div class="helix-box-grid">
+                <% sharedBoxes.forEach(box => { %>
+                    <div class="helix-box-card" style="background-image: url('/images/<%= box.label_design %>.jpg');">
+                        <div class="helix-box-overlay"></div>
+                        <div class="helix-box-content">
+                            <h3 class="helix-box-title"><%= box.box_name %></h3>
+                            <p class="helix-box-description"><%= box.description %></p>
+
+                            <!-- View Details Button -->
+                            <a href="/move_out/view-box/<%= box.box_id %>" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        <% } else { %>
+            <p>No shared boxes found.</p>
+        <% } %>
+
+        <a href="/move_out/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+
+<%- include("./../partials/footer.ejs") %>
+</body>

@@ -1,0 +1,28 @@
+<%- include("./../partials/header.ejs") %>
+
+<body class="slide-in">
+    <div class="users-page-container">
+        <h1 class="users-page-title">Users</h1>
+
+        <% if (users.length > 0) { %>
+            <div class="users-grid">
+                <% users.forEach(user => { %>
+                    <div class="user-card">
+                        <div class="user-profile-pic">
+                            <img src="/images/default-profile.jpg" alt="User profile picture" class="user-profile-pic">
+                        </div>
+                        <h3 class="user-name"><%= user.name %></h3>
+                        <p class="public-box-count">Public Boxes: <%= user.public_box_count %></p>
+                        <a href="/move_out/user/<%= user.user_id %>/boxes" class="view-boxes-btn">View Public Boxes</a>
+                    </div>
+                <% }); %>
+            </div>
+        <% } else { %>
+            <p>No users found.</p>
+        <% } %>
+
+        <a href="/move_out/dashboard" class="back-to-dashboard-btn">Back to Dashboard</a>
+    </div>
+
+<%- include("./../partials/footer.ejs") %>
+</body>

@@ -1,0 +1,39 @@
+<%- include("./../partials/header.ejs") %>
+
+<body>
+    <h2>All Users</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Storage Usage (MB)</th> <!-- Storage usage in MB -->
+                <th>Actions</th>
+                <th>Verfied</th>
+                <th>Created At</th>
+                <th>Last Activity</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% users.forEach(user => { %>
+                <tr>
+                    <td><%= user.name %></td>
+                    <td><%= user.email %></td>
+                    <td><%= user.status %></td>
+                    <td><%= (user.storageUsage / (1024 * 1024)).toFixed(2) %> MB</td> <!-- Convert bytes to MB -->
+                    <td>
+                        <form action="/move_out/admin/activate-deactivate/<%= user.user_id %>" method="POST">
+                            <button type="submit"><%= user.status === 'active' ? 'Deactivate' : 'Activate' %></button>
+                        </form>
+                    </td>
+                    <td><%= user.is_verfied %></td>
+                    <td><%= user.created_at %></td>
+                    <td><%= user.last_activity %></td>
+
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+
+<%- include("./../partials/footer.ejs") %>

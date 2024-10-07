@@ -1,0 +1,35 @@
+<%- include("./../partials/header.ejs") %>
+
+<body class="slide-in">
+    <div class="label-selection-container">
+        <h2>Select Your Label Design</h2>
+        <form action="/move_out/select-label" method="POST">
+            <div class="label-options">
+                <!-- Label 1 -->
+                <div class="label-design">
+                    <input type="radio" name="label_design" value="1" id="label1" required>
+                    <label for="label1">
+                        <img src="/images/label1.png" alt="Label Design 1">
+                    </label>
+                </div>
+                <!-- Label 2 -->
+                <div class="label-design">
+                    <input type="radio" name="label_design" value="2" id="label2">
+                    <label for="label2">
+                        <img src="/images/label2.png" alt="Label Design 2">
+                    </label>
+                </div>
+                <!-- Label 3 -->
+                <div class="label-design">
+                    <input type="radio" name="label_design" value="3" id="label3">
+                    <label for="label3">
+                        <img src="/images/label3.png" alt="Label Design 3">
+                    </label>
+                </div>
+            </div>
+            <button type="submit">Select Design</button>
+        </form>
+    </div>
+
+<%- include("./../partials/footer.ejs") %>
+</body>

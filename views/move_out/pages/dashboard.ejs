@@ -1,0 +1,60 @@
+<%- include("./../partials/header.ejs") %>
+
+<div class="dashboard-dashboard-container">
+    <!-- Profile Dropdown Container -->
+    <div class="profile-dropdown-container">
+        <div class="profile-icon" onclick="toggleProfileWindow()">
+            <img src="<%= user.profile_image || '/profiles/default-profile.png' %>" alt="Profile Image" class="profile-image">
+            <span><%= user.name %></span>
+            <span class="dropdown-arrow">▼</span>
+        </div>
+
+        <!-- Profile Modal Window -->
+        <div id="profile-window" class="profile-modal">
+            <div class="profile-modal-content">
+                <span class="close-profile" onclick="toggleProfileWindow()">&times;</span>
+                <h2>Your Profile</h2>
+                <img src="<%= user.profile_image || '/profiles/default-profile.png' %>" alt="Profile Image" class="profile-image-large">
+                <p><strong>Name:</strong> <%= user.name %></p>
+                <p><strong>Email:</strong> <%= user.email %></p>
+                <form action="/move_out/edit-profile" method="POST" enctype="multipart/form-data">
+                    <input type="file" name="profileImage" accept="image/*">
+                    <button type="submit" class="btn btn-primary">Update Profile Picture</button>
+                </form>
+                <form action="/move_out/deactivate-account" method="POST">
+                    <button type="submit" class="btn btn-danger">Deactivate Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <h1>Welcome, <%= user.name %>!</h1>
+    <p>Manage your moving boxes and profile here.</p>
+
+    <div class="dashboard-dashboard-actions">
+        <a href="/move_out/create-box" class="dashboard-btn dashboard-btn-primary">Create New Box</a>
+        <a href="/move_out/view-boxes" class="dashboard-btn dashboard-btn-secondary">View My Boxes</a>
+        <a href="/move_out/shared-labels" class="dashboard-btn dashboard-btn-secondary">View Shared Labels</a>
+        <a href="/move_out/users" class="dashboard-btn dashboard-btn-secondary">View All Users</a>
+    </div>
+
+    <div class="dashboard-dashboard-actions">
+        <a href="/move_out/logout" class="dashboard-btn dashboard-btn-tertiary">Logout</a>
+    </div>
+</div>
+
+<%- include("./../partials/footer.ejs") %>
+
+<script>
+    function toggleProfileWindow() {
+        const profileWindow = document.getElementById("profile-window");
+        profileWindow.style.display = profileWindow.style.display === "block" ? "none" : "block";
+    }
+
+    window.onclick = function(event) {
+        const profileWindow = document.getElementById("profile-window");
+        if (event.target === profileWindow) {
+            profileWindow.style.display = "none";
+        }
+    }
+</script>

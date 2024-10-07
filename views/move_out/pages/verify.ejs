@@ -1,0 +1,48 @@
+<%- include("./../partials/header.ejs") %>
+
+<body class="slide-in">
+    <div class="verification-container">
+        <h2 class="verification-title">Verify Your Email</h2>
+        <p class="verification-message">Please enter the 8-digit code sent to your email:</p>
+
+        <form action="/move_out/verify" method="POST" class="verification-form">
+            <div class="form-group">
+                <label for="verificationCode">Verification Code:</label>
+                <input type="text" name="verificationCode" id="verificationCode" required pattern="\d{8}" maxlength="8" class="form-input">
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Verify</button>
+            </div>
+        </form>
+    </div>
+
+    <style>
+        .verification-container {
+            text-align: center;
+            margin-top: 100px; /* Adjust top margin as needed */
+            color: white; /* Adjust text color */
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .verification-title {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        .verification-message {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        .form-input {
+            width: 100%; /* Full-width input */
+            padding: 10px; /* Padding for input */
+            margin-top: 10px; /* Space above input */
+            border-radius: 5px; /* Rounded corners */
+            border: none; /* Remove default border */
+            background-color: #fff; /* White background */
+            color: #000; /* Black text */
+        }
+    </style>
+</body>
+
+<%- include("./../partials/footer.ejs") %>

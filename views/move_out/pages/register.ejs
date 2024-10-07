@@ -1,0 +1,31 @@
+<%- include("./../partials/header.ejs") %>
+
+<body>
+  <div class="auth-container">
+    <h2>Create an Account</h2>
+    <% if (typeof errorMessage !== 'undefined') { %>
+      <div class="error-message">
+        <p><%= errorMessage %></p>
+      </div>
+    <% } %>
+    <form action="/move_out/register" method="POST">
+      <input type="text" name="name" placeholder="Enter your name" required>
+      <input type="email" name="email" placeholder="Enter your email" required>
+      <input type="password" name="password" placeholder="Enter your password" required>
+      <input type="submit" value="Register">
+    </form>
+    <div class="auth-footer">
+      <p>Already have an account? <a href="/move_out/login">Login here</a>.</p>
+    </div>
+
+
+    <!-- Google Sign-Up Button -->
+    <div class="google-auth">
+        <a href="/move_out/auth/google" class="google-btn">Sign Up with Google</a>
+    </div>
+  
+  
+  </div>
+</body>
+
+<%- include("./../partials/footer.ejs") %>

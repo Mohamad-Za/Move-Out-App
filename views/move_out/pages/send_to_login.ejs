@@ -1,0 +1,36 @@
+<%- include("./../partials/header.ejs") %>
+
+<body class="slide-in">
+    <div class="verification-success-container">
+        <h2 class="success-title">Email Verified</h2>
+        <p class="success-message">Email successfully verified! You can now log in.</p>
+
+        <div class="login-link">
+            <a href="/move_out/login" class="btn btn-primary">Go to Login Page</a>
+        </div>
+    </div>
+
+    <style>
+        .verification-success-container {
+            text-align: center;
+            margin-top: 100px; /* Adjust top margin as needed */
+            color: white; /* Adjust text color */
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .success-title {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        .success-message {
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
+        .login-link {
+            margin-top: 20px;
+        }
+    </style>
+</body>
+
+<%- include("./../partials/footer.ejs") %>

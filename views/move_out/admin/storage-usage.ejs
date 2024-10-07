@@ -1,0 +1,32 @@
+<%- include("./../partials/header.ejs") %>
+
+<body>
+    <div class="storage-usage-container">
+        <h2><%= title %></h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Total Storage Usage</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% storageUsage.forEach(user => { %>
+                    <tr>
+                        <td><%= user.user_id %></td>
+                        <td><%= user.name %></td>
+                        <td><%= user.email %></td>
+                        <td><%= user.total_storage_usage %> MB</td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+
+    <button onclick="window.location.href='/move_out/admin/dashboard'">Back to Dashboard</button>
+
+</body>
+
+<%- include("./../partials/footer.ejs") %>

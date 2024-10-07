@@ -1,0 +1,15 @@
+<%- include("./../partials/header.ejs") %>
+
+<body>
+    <div class="marketing-email-form">
+        <h2>Send Marketing Email</h2>
+        <form action="/move_out/admin/send-marketing-email" method="POST">
+            <input type="text" name="subject" placeholder="Email Subject" required>
+            <textarea name="message" placeholder="Email Message" required></textarea>
+            <input type="submit" value="Send Email">
+        </form>
+        <button onclick="window.location.href='/move_out/admin/dashboard'">Back to Dashboard</button>
+    </div>
+</body>
+
+<%- include("./../partials/footer.ejs") %>
