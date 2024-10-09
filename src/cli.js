@@ -1,4 +1,3 @@
-// "use strict";
 const config = require("../config/db/move_out.json");
 const mysql = require("promise-mysql");
 const bcrypt = require('bcryptjs');
@@ -9,22 +8,18 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 
-// Function to create a connection to the database
 async function getConnection() {
     return mysql.createConnection(config);
 }
 
-// Function to register a user (store in unverified_users)
 async function createUser(email, password, name) {
     const db = await getConnection();
     try {
-        // Check if the user is already registered
         const userExists = await db.query('SELECT * FROM users WHERE email = ?', [email]);
         if (userExists.length > 0) {
             throw new Error('User already exists with this email!');
         }
 
-        // Check if the user is already in unverified_users
         const unverifiedExists = await db.query('SELECT * FROM unverified_users WHERE email = ?', [email]);
         if (unverifiedExists.length > 0) {
             throw new Error('User already registered but not verified. Please check your email.');
@@ -33,15 +28,13 @@ async function createUser(email, password, name) {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Generate an 8-digit verification code
         const verificationCode = (Math.floor(10000000 + Math.random() * 90000000)).toString(); // 8-digit code as string
         const tokenExpiration = Date.now() + 3600000; // 1 hour expiration
 
-        // Insert into unverified_users table
         const sql = 'INSERT INTO unverified_users (email, password, verification_code, token_expiration, name) VALUES (?, ?, ?, ?, ?)';
         const result = await db.query(sql, [email, hashedPassword, verificationCode, tokenExpiration, name]);
 
-        return { userId: result.insertId, verificationCode }; // Return the verification code
+        return { userId: result.insertId, verificationCode }; 
     } catch (error) {
         console.error('Error creating user:', error);
         throw error;
@@ -72,7 +65,7 @@ async function sendVerificationEmail(email, verificationCode) {
         service: 'gmail',
         auth: {
             user: 'mohammad.zahedi230@gmail.com',
-            pass: 'wodu puji kbuf mqvx' // Your app-specific password
+            pass: 'wodu puji kbuf mqvx' 
         }
     });
 
@@ -96,7 +89,6 @@ async function sendVerificationEmail(email, verificationCode) {
 
 
 
-// // Function to verify the user's token
 // async function verifyUserToken(verificationToken) {
 //     const db = await getConnection();
 //     try {
@@ -127,11 +119,9 @@ async function sendVerificationEmail(email, verificationCode) {
 //     }
 // }
 
-// Function to verify the user's 8-digit code
 async function verifyUserCode(verificationCode) {
     const db = await getConnection();
     try {
-        // Find the user in unverified_users by verification code
         const sql = 'SELECT * FROM unverified_users WHERE verification_code = ? AND token_expiration > ?';
         const result = await db.query(sql, [verificationCode, Date.now()]);
 
@@ -141,11 +131,9 @@ async function verifyUserCode(verificationCode) {
 
         const user = result[0];
 
-        // Move the user to the users table (without verification_code and token_expiration)
         const insertSql = 'INSERT INTO users (email, password, is_verified, name) VALUES (?, ?, 1, ?)';
         await db.query(insertSql, [user.email, user.password, user.name]);
 
-        // Delete the user from unverified_users
         const deleteSql = 'DELETE FROM unverified_users WHERE id = ?';
         await db.query(deleteSql, [user.id]);
 
@@ -172,14 +160,12 @@ async function authenticateUser(email, password) {
 
         const user = users[0];
 
-        // Check if the account is deactivated
         if (user.status === 'inactive') {
             return { success: false, reason: 'deactivated' };
         }
 
-        // Check if the user is authenticated via Google (password should be null)
         if (user.password === null) {
-            await updateLastActivity(user.user_id); // Update the last activity on successful login
+            await updateLastActivity(user.user_id); 
             return { success: true, user };
         }
 
@@ -189,7 +175,7 @@ async function authenticateUser(email, password) {
             return { success: false, reason: 'invalid_password' };
         }
 
-        await updateLastActivity(user.user_id); // Update the last activity on successful login
+        await updateLastActivity(user.user_id); 
         return { success: true, user };
     } catch (err) {
         console.error('Error authenticating user:', err);
@@ -208,7 +194,7 @@ async function sendDeletionEmail(email, userId) {
         service: 'gmail',
         auth: {
             user: 'mohammad.zahedi230@gmail.com',
-            pass: 'wodu puji kbuf mqvx' // Your app-specific password
+            pass: 'wodu puji kbuf mqvx' 
         }
     });
 
@@ -288,7 +274,6 @@ async function sendShareNotificationEmail(email, box_id) {
 }
 
 
-// Function to send PIN via email
 async function sendPinEmail(email, pin) {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -316,14 +301,12 @@ async function sendPinEmail(email, pin) {
 
 
 
-// Fetch all users from the database and calculate storage usage
 async function getAllUsers() {
     const db = await getConnection();
     try {
         const sql = 'SELECT * FROM users';
         const users = await db.query(sql);
 
-        // Calculate storage usage for each user
         for (let user of users) {
             user.storageUsage = await calculateStorageUsage(user.user_id);
         }
@@ -341,7 +324,6 @@ async function getAllUsers() {
 
 
 
-// Fetch public boxes for a specific user
 async function getPublicBoxesByUser(userId) {
     const db = await getConnection();
     try {
@@ -357,7 +339,6 @@ async function getPublicBoxesByUser(userId) {
 
 
 
-// Fetch boxes shared with a specific email
 async function getSharedLabelsByEmail(email) {
     const db = await getConnection();
     try {
@@ -394,7 +375,6 @@ async function updateLastActivity(userId) {
 async function deactivateInactiveUsers() {
     const db = await getConnection();
     try {
-        // Check for users inactive for more than 30 days
         const sql = `
             UPDATE users 
             SET status = 'inactive' 
@@ -448,7 +428,7 @@ async function sendReminderEmails() {
         const users = await db.query(sql);
 
         for (const user of users) {
-            await sendReminderEmail(user.email); // Assuming sendReminderEmail is a function that sends an email
+            await sendReminderEmail(user.email); 
         }
 
         console.log('Reminder emails sent to inactive users.');
@@ -462,11 +442,10 @@ async function sendReminderEmails() {
 
 
 
-// Google OAuth configuration
 passport.use(new GoogleStrategy({
     clientID: '734043261353-i60gf4pghmmvivs7pe31e6cvdl9gllck.apps.googleusercontent.com',
     clientSecret: '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',
-    callbackURL: 'http://localhost:3000/move_out/auth/google/callback' // Ensure this matches exactly
+    callbackURL: 'http://localhost:3000/move_out/auth/google/callback' 
     },
     async (accessToken, refreshToken, profile, done) => {
         try {
@@ -476,15 +455,12 @@ passport.use(new GoogleStrategy({
             if (existingUser.length > 0) {
                 const user = existingUser[0];
                 
-                // Check if the user account is deactivated
                 if (user.status === 'inactive') {
-                    return done(null, false, { message: 'deactivated' }); // Set deactivated message
+                    return done(null, false, { message: 'deactivated' }); 
                 }
 
-                // Successful login for active users
                 return done(null, user);
             } else {
-                // Create a new user entry for Google sign up
                 const newUserSql = 'INSERT INTO users (name, email, is_verified, is_admin) VALUES (?, ?, 1, 0)';
                 const result = await db.query(newUserSql, [profile.displayName, profile.emails[0].value]);
 
@@ -506,24 +482,22 @@ passport.use(new GoogleStrategy({
 
 
 
-// Serialize user to session
 passport.serializeUser((user, done) => {
-    // console.log('Serializing user:', user); // Log the user being serialized
-    done(null, user.user_id); // Store the user ID in the session
+    // console.log('Serializing user:', user); 
+    done(null, user.user_id); 
 });
 
 
 
-// Deserialize user from session
 passport.deserializeUser(async (id, done) => {
     const db = await getConnection();
     const user = await db.query('SELECT * FROM users WHERE user_id = ?', [id]);
 
     if (user.length > 0) {
-        // console.log('Deserializing user:', user[0]); // Log the deserialized user
-        done(null, user[0]); // Pass the user object to the done callback
+        // console.log('Deserializing user:', user[0]); 
+        done(null, user[0]); 
     } else {
-        done(new Error('User not found')); // Handle user not found case
+        done(new Error('User not found')); 
     }
 });
 
@@ -538,7 +512,7 @@ async function sendMarketingEmail(email) {
         service: 'gmail',
         auth: {
             user: 'mohammad.zahedi230@gmail.com',
-            pass: 'wodu puji kbuf mqvx' // Your app-specific password
+            pass: 'wodu puji kbuf mqvx'
         }
     });
 
@@ -561,11 +535,9 @@ async function sendMarketingEmail(email) {
 
 
 
-// Function to activate or deactivate a user
 async function toggleUserStatus(userId) {
     const db = await getConnection();
     try {
-        // Check current status
         const currentStatus = await db.query('SELECT status FROM users WHERE user_id = ?', [userId]);
 
         if (currentStatus.length === 0) {
@@ -574,7 +546,6 @@ async function toggleUserStatus(userId) {
 
         const newStatus = currentStatus[0].status === 'active' ? 'inactive' : 'active';
 
-        // Update the user status
         await db.query('UPDATE users SET status = ? WHERE user_id = ?', [newStatus, userId]);
         return { success: true, newStatus };
     } catch (error) {
@@ -614,18 +585,16 @@ async function toggleUserStatus(userId) {
 // }
 
 
-// Updated Function to calculate storage usage for a user
 async function calculateStorageUsage(userId) {
     const db = await getConnection();
     try {
-        // Calculate the total storage usage by summing the size of each content
         const sql = `
             SELECT SUM(size) AS total_size
             FROM contents
             WHERE box_id IN (SELECT box_id FROM boxes WHERE user_id = ?)
         `;
         const result = await db.query(sql, [userId]);
-        const totalSize = result[0].total_size || 0; // Default to 0 if null
+        const totalSize = result[0].total_size || 0; 
 
         return totalSize;
     } catch (error) {
@@ -658,5 +627,4 @@ module.exports = {
     passport,
     sendMarketingEmail,
     toggleUserStatus,
-    // getStorageUsage,
 };
