@@ -1,37 +1,45 @@
 <%- include("./../partials/header.ejs") %>
 
-<body>
+<body class="admin-dashboard-body">
     <div class="admin-dashboard-container">
-        <h2>Admin Dashboard</h2>
-
-        <!-- Other admin functionalities/buttons -->
-
-        <div class="admin-actions">
-            <h3>Admin Actions</h3>
-            <ul>
-                <li>
-                    <a href="/move_out/admin/users" class="admin-button">View All Users</a>
-                </li>
-                <li>
-                    <a href="/move_out/admin/storage-usage" class="admin-button">View Storage Usage</a>
-                </li>
-                <li>
-                    <a href="/move_out/admin/send-marketing-emails" class="admin-button">Send Marketing Emails</a>
-                </li>
-                <li>
-                    <a href="/move_out/admin/activate-deactivate-users" class="admin-button">Activate/Deactivate Users</a>
-                </li>
-                <li>
-                    <a href="/move_out/admin/view-reports" class="admin-button">View Reports</a>
-                </li>
-                <li>
-                    <a href="/move_out/logout" class="admin-button">Log Out</a>
-                </li>
-            </ul>
-        </div>
+        <h2 class="admin-dashboard-title">All Users</h2>
+        <table class="admin-user-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Storage Usage (MB)</th>
+                    <th>Verified</th>
+                    <th>Created At</th>
+                    <th>Last Activity</th>
+                    <th>Actions</th>
+                    <th>Send Marketing Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% users.forEach(user => { %>
+                    <tr>
+                        <td><%= user.name %></td>
+                        <td><%= user.email %></td>
+                        <td class="<%= user.status === 'active' ? 'status-active' : 'status-inactive' %>"><%= user.status %></td>
+                        <td><%= (user.storageUsage / (1024 * 1024)).toFixed(2) %> MB</td>
+                        <td><%= user.is_verified ? 'Yes' : 'No' %></td>
+                        <td><%= new Date(user.created_at).toLocaleDateString() %></td>
+                        <td><%= new Date(user.last_activity).toLocaleString() %></td>
+                        <td>
+                            <form action="/move_out/admin/activate-deactivate/<%= user.user_id %>" method="POST">
+                                <button type="submit" class="admin-action-btn"><%= user.status === 'active' ? 'Deactivate' : 'Activate' %></button>
+                            </form>
+                        </td>
+                        <td>
+                            <a href="/move_out/admin/send-marketing-email" class="admin-button">Send Email</a>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
     </div>
-</body>
 
 <%- include("./../partials/footer.ejs") %>
-
-
+</body>

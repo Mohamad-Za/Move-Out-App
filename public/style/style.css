@@ -1252,16 +1252,220 @@ h1 {
 /* Admin Dashboard */
 
 
+
+
+/* Admin Dashboard Body */
+.admin-dashboard-body {
+    background-color: #f5f7fa;
+    font-family: 'Poppins', sans-serif;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Admin Dashboard Container */
+.admin-dashboard-container {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* Dashboard Title */
+.admin-dashboard-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #5d6671;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+/* User Table Styling */
+.admin-user-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.admin-user-table th,
+.admin-user-table td {
+    padding: 15px;
+    text-align: center;
+    font-size: 1rem;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s ease;
+}
+
+.admin-user-table th {
+    background-color: #5d6671;
+    color: white;
+    font-weight: 600;
+}
+
+.admin-user-table tr:nth-child(even) {
+    background-color: #f8f8f8;
+}
+
+.admin-user-table tr:hover {
+    background-color: #f1f5ff;
+}
+
+/* Status Colors */
+.status-active {
+    color: green;
+    font-weight: 600;
+}
+
+.status-inactive {
+    color: red;
+    font-weight: 600;
+}
+
+/* Admin Action Buttons */
+.admin-action-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.admin-action-btn:hover {
+    background-color: #45a049;
+}
+
+/* Admin Button Styling */
 .admin-button {
     display: inline-block;
     padding: 10px 15px;
-    margin: 5px;
-    background-color: #4CAF50; /* Green */
+    margin-top: 5px;
+    background-color: #0072ff;
     color: white;
     text-decoration: none;
     border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
 .admin-button:hover {
-    background-color: #45a049; /* Darker green */
+    background-color: #005bb5;
+}
+
+
+
+
+
+
+/* -------------------------------------------------------------------- */
+/* send-marketing-email.ejs */
+
+
+
+/* Styling for the Send Marketing Email Page */
+.marketing-email-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 40px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    text-align: center;
+}
+
+.marketing-email-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: #0072ff;
+    margin-bottom: 30px;
+}
+
+/* Form styling */
+.marketing-email-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center; /* Added to center form elements horizontally */
+}
+
+/* Form group */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    width: 100%; /* Ensure form-group takes full width */
+}
+
+/* Labels */
+.marketing-label {
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+/* Input fields */
+.marketing-input,
+.marketing-textarea {
+    width: 100%; /* Ensure inputs take full width of the form group */
+    max-width: 500px; /* Set a max-width to control the input size */
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9fafb;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.marketing-input:focus,
+.marketing-textarea:focus {
+    border-color: #0072ff;
+    background-color: #fff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 114, 255, 0.1);
+}
+
+/* Submit Button */
+.marketing-btn-primary {
+    padding: 14px;
+    background-color: #0072ff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%; /* Button takes full width */
+    max-width: 300px; /* Set a max-width for button */
+}
+
+.marketing-btn-primary:hover {
+    background-color: #005bb5;
+    box-shadow: 0 4px 12px rgba(0, 91, 181, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .marketing-email-container {
+        padding: 30px;
+    }
+
+    .marketing-email-title {
+        font-size: 24px;
+    }
+
+    .marketing-input,
+    .marketing-textarea {
+        max-width: 100%; /* Ensure inputs are fully responsive on small screens */
+    }
+
+    .marketing-btn-primary {
+        max-width: 100%; /* Ensure button is fully responsive on small screens */
+    }
 }

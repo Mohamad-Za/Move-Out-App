@@ -1060,7 +1060,7 @@ router.get('/admin/dashboard', async (req, res) => {
 router.get('/admin/users', async (req, res) => {
     try {
         const users = await getAllUsers();
-        res.render('move_out/admin/users.ejs', { users, title: 'All Users' });
+        res.render('move_out/admin/dashboard.ejs', { users, title: 'All Users' });
     } catch (error) {
         console.error('Error fetching users:', error);
         res.status(500).send('Error fetching users.');
@@ -1070,9 +1070,38 @@ router.get('/admin/users', async (req, res) => {
 
 
 
+// Route to render marketing email form
 router.get('/admin/send-marketing-email', (req, res) => {
+    if (!req.session.user || !req.session.user.is_admin) {
+        return res.redirect('/move_out/login');
+    }
+
     res.render('move_out/admin/send-marketing-email.ejs', { title: 'Send Marketing Email' });
 });
+
+
+
+// POST route to send marketing email to all active users
+router.post('/admin/send-marketing-email', async (req, res) => {
+    const { subject, content } = req.body;
+
+    try {
+        // Call the sendMarketingEmail function to handle the email sending
+        const result = await sendMarketingEmail(subject, content);
+
+        if (result.success) {
+            console.log('Marketing email sent successfully to all active users.');
+            res.redirect('/move_out/admin/dashboard');
+        } else {
+            console.error('Error sending marketing email:', result.error);
+            res.status(500).send('Error sending marketing email.');
+        }
+    } catch (error) {
+        console.error('Error sending marketing email:', error);
+        res.status(500).send('Error sending marketing email.');
+    }
+});
+
 
 
 

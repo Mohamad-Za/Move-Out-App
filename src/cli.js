@@ -304,7 +304,7 @@ async function sendPinEmail(email, pin) {
 async function getAllUsers() {
     const db = await getConnection();
     try {
-        const sql = 'SELECT * FROM users';
+        const sql = 'SELECT * FROM users WHERE is_admin = 0';
         const users = await db.query(sql);
 
         for (let user of users) {
@@ -507,30 +507,75 @@ passport.deserializeUser(async (id, done) => {
 
 
 
-async function sendMarketingEmail(email) {
-    const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'mohammad.zahedi230@gmail.com',
-            pass: 'wodu puji kbuf mqvx'
-        }
-    });
+// async function sendMarketingEmail(email) {
+//     const transporter = nodemailer.createTransport({
+//         service: 'gmail',
+//         auth: {
+//             user: 'mohammad.zahedi230@gmail.com',
+//             pass: 'wodu puji kbuf mqvx'
+//         }
+//     });
 
-    const mailOptions = {
-        from: 'mohammad.zahedi230@gmail.com',
-        to: email,
-        subject: 'Exciting Updates from Move Out',
-        html: `<p>We have some exciting updates for you! Check them out at our website.</p>`
-    };
+//     const mailOptions = {
+//         from: 'mohammad.zahedi230@gmail.com',
+//         to: email,
+//         subject: 'Exciting Updates from Move Out',
+//         html: `<p>We have some exciting updates for you! Check them out at our website.</p>`
+//     };
 
+//     try {
+//         await transporter.sendMail(mailOptions);
+//         console.log('Marketing email sent to:', email);
+//     } catch (error) {
+//         console.error('Error sending marketing email:', error);
+//         throw error;
+//     }
+// }
+
+
+
+
+
+
+async function sendMarketingEmail(subject, content) {
     try {
-        await transporter.sendMail(mailOptions);
-        console.log('Marketing email sent to:', email);
+        const db = await mysql.createConnection(config);
+
+        // Fetch all active users
+        const sqlUsers = 'SELECT email FROM users WHERE status = "active"';
+        const users = await db.query(sqlUsers);
+
+        // Set up email transport with nodemailer
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'mohammad.zahedi230@gmail.com',
+                pass: 'wodu puji kbuf mqvx'
+            }
+        });
+
+        // Prepare email options
+        const mailOptions = {
+            from: 'mohammad.zahedi230@gmail.com',
+            subject: subject,
+            html: content
+        };
+
+        // Send the email to each active user
+        for (const user of users) {
+            mailOptions.to = user.email;
+            await transporter.sendMail(mailOptions);
+        }
+
+        return { success: true };
     } catch (error) {
-        console.error('Error sending marketing email:', error);
-        throw error;
+        console.error('Error in sendMarketingEmail:', error);
+        return { success: false, error };
     }
 }
+
+
+
 
 
 
