@@ -1,0 +1,241 @@
+/* Overlay for background image */
+.box-details-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Dark overlay to improve text readability */
+    z-index: 1;
+}
+
+/* Container styling */
+.box-details-container {
+    position: relative;
+    z-index: 2; /* Ensure the content is on top of the overlay */
+    color: white;
+    padding: 40px 20px;
+    height: 90vh;
+}
+
+/* Title Styling */
+.page-title {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: -50px;
+    color: #f1f1f1;
+}
+
+/* QR Code Popup */
+.qr-code-btn-container {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.qr-code-popup {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 999;
+}
+
+.qr-code-popup-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.qr-code-popup img {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 20px;
+}
+
+/* Box Header */
+.box-header {
+    margin-bottom: 0.5px;
+    text-align: center;
+}
+
+.box-title {
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.box-description {
+    font-size: 18px;
+    margin-top: -20px;
+    font-style: italic;
+}
+
+.box-created {
+    font-size: 14px;
+    color: #ddd;
+    margin-top: 5px;
+}
+
+/* Content Display - Scrollable container */
+.scrollable-content {
+    max-height: 50vh; /* Control the height of the scrollable content area */
+    overflow-y: auto;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Content cards */
+.box-content-display {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 10px;
+}
+
+.content-card {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    min-height: 250px; /* Make the content cards bigger */
+}
+
+.content-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* Content inside cards */
+.content-image img {
+    width: 100%;
+    max-width: 250px;
+    border-radius: 10px;
+}
+
+.content-audio audio {
+    width: 100%;
+}
+
+/* Improved text content */
+.content-text {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 18px; /* Slightly larger font for better readability */
+    color: white;
+    text-align: center;
+    width: 100%;
+    max-width: 400px; /* Set max-width to match image and audio */
+    max-height: 200px; /* Set a max-height to limit overflow */
+    overflow-y: auto; /* Enable vertical scroll if text exceeds max-height */
+    word-wrap: break-word; /* Ensure long words are wrapped */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Add box shadow to match other content types */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.content-text:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+
+/* Box Actions */
+.box-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+/* Buttons */
+.btn {
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #17a2b8;
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #17a2b8;
+}
+
+.btn-secondary {
+    background-color: #17a2b8;
+    color: white;
+    border: none;
+}
+
+.btn-secondary:hover {
+    background-color: #17a2b8;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .box-content-display {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+
+    .content-card {
+        padding: 15px;
+    }
+
+    .content-image img, .content-audio audio {
+        max-width: 100%;
+    }
+
+    .content-text {
+        max-width: 100%;
+    }
+
+    .scrollable-content {
+        max-height: 40vh;
+    }
+}
+
+.share-label-section {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.share-label-form {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.share-label-input {
+    padding: 10px;
+    width: 250px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.share-btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: #17a2b8;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.share-btn:hover {
+    background-color: #138f9a;
+}

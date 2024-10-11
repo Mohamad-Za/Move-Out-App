@@ -1,0 +1,101 @@
+/* Admin Dashboard Body */
+.admin-dashboard-body {
+    background-color: #f5f7fa;
+    font-family: 'Poppins', sans-serif;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Admin Dashboard Container */
+.admin-dashboard-container {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* Dashboard Title */
+.admin-dashboard-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #5d6671;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+/* User Table Styling */
+.admin-user-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.admin-user-table th,
+.admin-user-table td {
+    padding: 15px;
+    text-align: center;
+    font-size: 1rem;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s ease;
+}
+
+.admin-user-table th {
+    background-color: #5d6671;
+    color: white;
+    font-weight: 600;
+}
+
+.admin-user-table tr:nth-child(even) {
+    background-color: #f8f8f8;
+}
+
+.admin-user-table tr:hover {
+    background-color: #f1f5ff;
+}
+
+/* Status Colors */
+.status-active {
+    color: green;
+    font-weight: 600;
+}
+
+.status-inactive {
+    color: red;
+    font-weight: 600;
+}
+
+/* Admin Action Buttons */
+.admin-action-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.admin-action-btn:hover {
+    background-color: #45a049;
+}
+
+/* Admin Button Styling */
+.admin-button {
+    display: inline-block;
+    padding: 10px 15px;
+    margin-top: 5px;
+    background-color: #0072ff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.admin-button:hover {
+    background-color: #005bb5;
+}

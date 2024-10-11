@@ -15,14 +15,12 @@
                                 <p class="helix-box-description"><%= box.description %></p>
                             </div>
 
-                            <!-- QR Code -->
                             <% if (box.qr_code_data) { %>
                                 <div class="helix-qr-code-container">
                                     <img src="<%= box.qr_code_data %>" alt="QR Code for <%= box.box_name %>" class="helix-qr-code">
                                 </div>
                             <% } %>
 
-                            <!-- View Details Button -->
                             <div class="helix-box-actions">
                                 <a href="/move_out/view-box/<%= box.box_id %>" class="helix-btn helix-btn-primary">View Details</a>
                                 <% if (box.qr_code_data) { %>
@@ -42,7 +40,6 @@
         </div>
     </div>
 
-    <!-- Add script to handle QR code printing -->
     <script>
         function printQRCode(qrCodeUrl) {
             const printWindow = window.open('', '', 'width=600,height=400');

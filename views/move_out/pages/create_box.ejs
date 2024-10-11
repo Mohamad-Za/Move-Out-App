@@ -4,17 +4,11 @@
     <div class="container create-box-page">
         <h1>Create Your Box</h1>
         <form action="/move_out/create-box" method="POST" enctype="multipart/form-data" class="create-box-form">
-            <!-- Box Name and Description -->
             <div class="form-group">
                 <input type="text" name="boxName" class="form-input" placeholder=" " required>
                 <label class="form-label">Box Name</label>
             </div>
-            <div class="form-group">
-                <textarea name="description" class="form-input" rows="4" placeholder=" " required></textarea>
-                <label class="form-label">Description</label>
-            </div>
 
-            <!-- Label Design Selection -->
             <div class="label-designs">
                 <h2>Choose a Label Design</h2>
                 <div class="label-options">
@@ -40,7 +34,6 @@
                         <span class="label-name">Design 3</span>
                     </label>
 
-                    <!-- Custom Label Upload -->
                     <label class="label-card">
                         <input type="radio" name="label_design" value="custom" id="custom-label-radio">
                         <div class="label-image" id="custom-label-preview" style="display: none;">
@@ -52,16 +45,14 @@
                 </div>
             </div>
 
-            <!-- Privacy Option -->
             <div class="form-group">
                 <label for="privacy" class="form-label-select">Privacy</label>
                 <select name="privacy" id="privacy" class="form-input" required>
                     <option value="public">Public</option>
-                    <option value="private">Private (Requires PIN)</option>
+                    <option value="private">Private (6-digit PIN)</option>
                 </select>
             </div>
 
-            <!-- Content Type Selection -->
             <div class="form-group">
                 <label for="content-type" class="form-label-select">Choose Content Type:</label>
                 <select name="content_type" id="content-type" class="form-input" required>
@@ -71,17 +62,14 @@
                 </select>
             </div>
 
-            <!-- Text Input -->
             <div class="form-group content-input" id="text-input" style="display: block;">
                 <textarea name="text_content[]" placeholder="Enter your text content here" class="form-input"></textarea>
             </div>
 
-            <!-- Image Upload -->
             <div class="form-group content-input" id="image-input" style="display: none;">
                 <input type="file" name="image_content[]" accept="image/*" multiple class="form-input">
             </div>
 
-            <!-- Audio Upload -->
             <div class="form-group content-input" id="audio-input" style="display: none;">
                 <input type="file" name="audio_content[]" accept="audio/*" multiple class="form-input">
             </div>
@@ -93,7 +81,6 @@
 <%- include("./../partials/footer.ejs") %>
 
 <script>
-    // Script to toggle content input types based on selection
     const contentTypeSelector = document.getElementById('content-type');
     const textInput = document.getElementById('text-input');
     const imageInput = document.getElementById('image-input');
@@ -120,7 +107,6 @@
         }
     });
 
-    // Preview uploaded custom label
     customLabelUpload.addEventListener('change', function(event) {
         const file = event.target.files[0];
         if (file) {

@@ -9,7 +9,7 @@
                 <% users.forEach(user => { %>
                     <div class="user-card">
                         <div class="user-profile-pic">
-                            <img src="/images/default-profile.jpg" alt="User profile picture" class="user-profile-pic">
+                            <img src="<%= user.profile_image %>" alt="User profile picture" class="user-profile-pic">
                         </div>
                         <h3 class="user-name"><%= user.name %></h3>
                         <p class="public-box-count">Public Boxes: <%= user.public_box_count %></p>

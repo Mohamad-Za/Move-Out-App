@@ -1,0 +1,23 @@
+.verification-container {
+    text-align: center;
+    margin-top: 100px; 
+    color: white; 
+    background-color: rgba(0, 0, 0, 0.7); 
+    padding: 20px;
+    border-radius: 10px;
+}
+.verification-title {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+.verification-message {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+.verification-instruction {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+.resend-form {
+    display: inline-block;
+}

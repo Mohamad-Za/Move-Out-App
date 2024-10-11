@@ -3,60 +3,52 @@
 <body class="slide-in" style="background-image: url('/images/<%= box.label_design %>.jpg'); background-size: cover; background-position: center;">
     <div class="edit-box-page">
         <div class="edit-box-container">
-            <!-- Box Title and Description at the Top -->
             <div class="edit-box-header">
                 <h2 class="edit-box-title">Edit Box - <%= box.box_name %></h2>
-                <p class="edit-box-description">Edit the box details and add new content below.</p>
             </div>
 
             <form action="/move_out/edit-box/<%= box.box_id %>" method="POST" enctype="multipart/form-data">
-                <!-- Box Name -->
                 <div class="edit-box-group">
                     <label for="boxName" class="edit-box-label">Box Name</label>
                     <input type="text" id="boxName" name="boxName" class="edit-box-input" value="<%= box.box_name %>" required>
                 </div>
 
-                <!-- Description -->
-                <div class="edit-box-group">
-                    <label for="description" class="edit-box-label">Description</label>
-                    <textarea id="description" name="description" rows="4" class="edit-box-input edit-box-textarea" required><%= box.description %></textarea>
-                </div>
-
-                <!-- Label Design Display (non-editable) -->
                 <div class="edit-box-label-preview">
                     <label class="edit-box-label">Label Design:</label>
                     <img src="/images/<%= box.label_design %>.jpg" alt="Label Design" class="edit-box-label-image">
                 </div>
 
-                <!-- Content Type (for new content) -->
                 <div class="edit-box-group">
                     <label for="content_type" class="edit-box-label">Add New Content Type:</label>
-                    <select id="content_type" name="content_type" class="edit-box-select">
-                        <option value="text">Text</option>
+                    <select id="content_type" name="content_type" class="edit-box-select" required>
                         <option value="image">Image</option>
                         <option value="audio">Audio</option>
                     </select>
                 </div>
 
-                <!-- Add New Content Input -->
-                <div class="edit-box-group">
-                    <label for="file_upload" class="edit-box-label">Add New Content:</label>
-                    <input type="file" id="file_upload" name="file_upload" class="edit-box-file-input" accept="image/*,audio/*">
+                <div class="edit-box-group content-input" id="image-input" style="display: block;">
+                    <input type="file" name="image_content[]" accept="image/*" multiple class="edit-box-file-input">
                 </div>
 
-                <!-- Submit Button -->
+                <div class="edit-box-group content-input" id="audio-input" style="display: none;">
+                    <input type="file" name="audio_content[]" accept="audio/*" multiple class="edit-box-file-input">
+                </div>
+
                 <div class="edit-box-group">
                     <button type="submit" class="edit-box-btn-primary">Update Box</button>
                 </div>
             </form>
 
-            <!-- Existing Content -->
             <div class="edit-box-existing-content">
                 <h3 class="edit-box-existing-title">Existing Content</h3>
                 <% contents.forEach(content => { %>
                     <div class="edit-box-content-item">
                         <% if (content.content_type === 'text') { %>
-                            <p class="edit-box-text-content"><%= content.content_data %></p>
+                            <form action="/move_out/edit-box/<%= box.box_id %>" method="POST">
+                                <input type="hidden" name="updated_content_id" value="<%= content.content_id %>">
+                                <textarea name="updated_content" class="edit-box-input edit-box-textarea" required><%= content.content_data %></textarea>
+                                <button type="submit" class="edit-box-btn-primary">Update Text</button>
+                            </form>
                         <% } else if (content.content_type === 'image') { %>
                             <img src="<%= content.content_data %>" alt="Image Content" class="edit-box-content-image">
                         <% } else if (content.content_type === 'audio') { %>
@@ -64,7 +56,6 @@
                                 <source src="<%= content.content_data %>" type="audio/mpeg">
                             </audio>
                         <% } %>
-                        <!-- Remove Content Button -->
                         <form action="/move_out/remove-content/<%= content.content_id %>" method="POST">
                             <button type="submit" class="edit-box-btn-danger">Remove</button>
                         </form>
@@ -72,7 +63,6 @@
                 <% }); %>
             </div>
 
-            <!-- Cancel Button -->
             <div class="back-to-details">
                 <a href="/move_out/view-box/<%= box.box_id %>" class="edit-box-btn-secondary">Cancel</a>
             </div>
@@ -80,4 +70,22 @@
     </div>
 
 <%- include("./../partials/footer.ejs") %>
+
+<script>
+    const contentTypeSelector = document.getElementById('content_type');
+    const textInput = document.getElementById('text-input');
+    const imageInput = document.getElementById('image-input');
+    const audioInput = document.getElementById('audio-input');
+
+    contentTypeSelector.addEventListener('change', function() {
+        const selectedType = this.value;
+        if (selectedType === 'image') {
+            imageInput.style.display = 'block';
+            audioInput.style.display = 'none';
+        } else if (selectedType === 'audio') {
+            imageInput.style.display = 'none';
+            audioInput.style.display = 'block';
+        }
+    });
+</script>
 </body>

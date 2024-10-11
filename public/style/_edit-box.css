@@ -1,0 +1,242 @@
+/* Edit Box Page Styles - Unique Classes */
+.edit-box-page {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 50px 20px;
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background for contrast */
+}
+
+.edit-box-container {
+    width: 100%;
+    max-width: 950px;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 50px;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9); /* Enhanced shadow */
+    animation: fadeIn 0.5s ease-in-out;
+    margin-top: 1000px; /* Moved down by 100px */
+}
+
+
+.edit-box-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.edit-box-title {
+    font-size: 32px;
+    color: #333;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.edit-box-description {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+/* Form Group Styles */
+.edit-box-group {
+    margin-bottom: 25px;
+}
+
+.edit-box-label {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 8px;
+    display: block;
+    font-weight: 500;
+}
+
+.edit-box-input,
+.edit-box-select {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.edit-box-input:focus {
+    border-color: #007bff;
+    background-color: #fff;
+    outline: none;
+}
+
+.edit-box-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.edit-box-file-input {
+    margin-top: 15px;
+    padding: 12px;
+    font-size: 16px;
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+/* Label Design Preview */
+.edit-box-label-preview {
+    text-align: center;
+    margin-top: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.edit-box-label-image {
+    width: 100%;
+    max-width: 250px;
+    height: auto;
+    border-radius: 8px;
+}
+
+/* Buttons */
+.edit-box-btn-primary {
+    width: 100%;
+    padding: 14px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.edit-box-btn-primary:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.edit-box-btn-danger {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.edit-box-btn-danger:hover {
+    background-color: #c82333;
+}
+
+.edit-box-btn-secondary {
+    display: inline-block;
+    padding: 12px 20px;
+    background-color: #6c757d;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.edit-box-btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.edit-box-existing-content {
+    margin-top: 40px;
+}
+
+.edit-box-existing-title {
+    font-size: 22px;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.edit-box-content-item {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.edit-box-text-content {
+    font-size: 16px;
+    color: #555;
+}
+
+.edit-box-content-image {
+    max-width: 180px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.content-audio {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.content-audio audio {
+    width: 100%;
+    max-width: 400px; 
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.content-audio audio::-webkit-media-controls-panel {
+    background-color: #f1f1f1; 
+}
+
+.content-audio audio::-webkit-media-controls-play-button,
+.content-audio audio::-webkit-media-controls-timeline {
+    color: #17a2b8;
+}
+
+.content-audio:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+
+.edit-box-audio-content {
+    max-width: 180px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .edit-box-container {
+        padding: 30px;
+    }
+
+    .edit-box-title {
+        font-size: 28px;
+    }
+
+    .edit-box-description {
+        font-size: 14px;
+    }
+
+    .edit-box-content-image {
+        max-width: 150px;
+    }
+}
+

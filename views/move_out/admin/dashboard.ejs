@@ -1,9 +1,10 @@
 <%- include("./../partials/header.ejs") %>
 
-<body class="admin-dashboard-body">
-    <div class="admin-dashboard-container">
-        <h2 class="admin-dashboard-title">All Users</h2>
-        <table class="admin-user-table">
+<div class="admin-dashboard-container">
+    <h2 class="admin-page-title">Admin Dashboard</h2>
+
+    <div class="admin-table-container">
+        <table class="admin-table">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -22,24 +23,36 @@
                     <tr>
                         <td><%= user.name %></td>
                         <td><%= user.email %></td>
-                        <td class="<%= user.status === 'active' ? 'status-active' : 'status-inactive' %>"><%= user.status %></td>
+                        <td><%= user.status %></td>
                         <td><%= (user.storageUsage / (1024 * 1024)).toFixed(2) %> MB</td>
                         <td><%= user.is_verified ? 'Yes' : 'No' %></td>
                         <td><%= new Date(user.created_at).toLocaleDateString() %></td>
-                        <td><%= new Date(user.last_activity).toLocaleString() %></td>
+                        <td><%= new Date(user.last_activity).toLocaleDateString() %></td>
                         <td>
-                            <form action="/move_out/admin/activate-deactivate/<%= user.user_id %>" method="POST">
-                                <button type="submit" class="admin-action-btn"><%= user.status === 'active' ? 'Deactivate' : 'Activate' %></button>
-                            </form>
+                            <% if (!user.is_admin) { %>
+                                <form action="/move_out/admin/activate-deactivate/<%= user.user_id %>" method="POST">
+                                    <button type="submit" class="admin-action-btn">
+                                        <%= user.status === 'active' ? 'Deactivate' : 'Activate' %>
+                                    </button>
+                                </form>
+                            <% } else { %>
+                                <span class="admin-status">Admin</span>
+                            <% } %>
                         </td>
                         <td>
-                            <a href="/move_out/admin/send-marketing-email" class="admin-button">Send Email</a>
+                            <% if (!user.is_admin) { %>
+                                <a href="/move_out/admin/send-marketing-email" class="admin-button:hover">Send Email</a>
+                            <% } %>
                         </td>
                     </tr>
-                <% }) %>
+                <% }); %>
             </tbody>
         </table>
     </div>
 
+    <div class="admin-dashboard-actions">
+        <a href="/move_out/logout" class="btn btn-primary">Logout</a>
+    </div>
+</div>
+
 <%- include("./../partials/footer.ejs") %>
-</body>

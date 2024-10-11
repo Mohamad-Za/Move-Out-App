@@ -1,0 +1,158 @@
+/* General styling for body */
+body {
+    background-color: #f0f8ff;
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/* Dashboard container styling */
+.dashboard-dashboard-container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 40px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Dashboard actions */
+.dashboard-dashboard-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    gap: 20px;
+}
+
+.dashboard-dashboard-actions .dashboard-btn {
+    padding: 15px 30px;
+    text-decoration: none;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+}
+
+/* Button colors */
+.dashboard-btn-primary {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.dashboard-btn-primary:hover {
+    background-color: #17a2b8;
+}
+
+.dashboard-btn-secondary {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.dashboard-btn-secondary:hover {
+    background-color: #17a2b8;
+}
+
+.dashboard-btn-tertiary {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.dashboard-btn-tertiary:hover {
+    background-color: #17a2b8;
+}
+
+.dashboard-btn-danger {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.dashboard-btn-danger:hover {
+    background-color: #17a2b8;
+}
+
+
+
+
+.profile-dropdown-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.profile-icon {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 10px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.profile-icon:hover {
+    background-color: #f0f0f0;
+}
+
+.profile-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.dropdown-arrow {
+    font-size: 14px;
+    color: #888;
+}
+
+.profile-modal {
+    display: none;
+    position: fixed;
+    top: 50px;
+    right: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    z-index: 1000;
+}
+
+.profile-modal-content {
+    padding: 20px;
+}
+
+.close-profile {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.profile-image-large {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin: 10px 0;
+}
+
+
+
+@media (max-width: 768px) {
+    .dashboard-dashboard-actions {
+        flex-direction: column;
+    }
+
+    .dashboard-dashboard-actions .dashboard-btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

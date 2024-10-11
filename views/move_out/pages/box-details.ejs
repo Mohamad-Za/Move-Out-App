@@ -1,7 +1,7 @@
 <%- include("./../partials/header.ejs") %>
 
 <body class="slide-in" style="background-image: url('/images/<%= box.label_design %>.jpg'); background-size: cover; background-position: center;">
-    <div class="box-details-overlay"></div> <!-- Dark overlay for readability -->
+    <div class="box-details-overlay"></div> 
     <div class="container box-details-container">
         
         <h2 class="page-title">Box Details</h2>
@@ -9,11 +9,9 @@
         <div class="box-content">
             <div class="box-header">
                 <h3 class="box-title"><%= box.box_name %></h3>
-                <p class="box-description"><%= box.description %></p>
                 <p class="box-created">Created on: <%= new Date(box.created_at).toLocaleString() %></p>
             </div>
 
-            <!-- Display all content (images, audio, text) inside bigger content cards -->
             <div class="box-content-display scrollable-content">
                 <% contents.forEach(content => { %>
                     <div class="content-card">
@@ -37,9 +35,8 @@
                 <% }); %>
             </div>
 
-            <!-- Share label functionality -->
             <div class="share-label-section">
-                <% if (user) { %> <!-- Check if user is logged in -->
+                <% if (user) { %>
                 <h3>Share this Box</h3>
                 <form action="/move_out/share-label/<%= box.box_id %>" method="POST" class="share-label-form">
                     <input type="email" name="email" placeholder="Enter email to share with" class="share-label-input" required>
@@ -48,33 +45,30 @@
                 <% } %>
             </div>
 
-            <!-- Edit and Back buttons -->
             <div class="box-actions">
-                <% if (user) { %> <!-- Check if user is logged in -->
+                <% if (user) { %> 
                     <a href="/move_out/edit-box/<%= box.box_id %>" class="btn btn-primary">Edit Box</a>
                     <a href="/move_out/view-boxes" class="btn btn-secondary">Back to Boxes</a>
-                    <a href="/move_out/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+                    <!-- <a href="/move_out/dashboard" class="btn btn-secondary">Back to Dashboard</a> -->
+                    <form action="/move_out/delete-box/<%= box.box_id %>" method="POST" style="display: inline;">
+                        <button type="submit" class="btn btn-secondary" onclick="return confirm('Are you sure you want to delete this box?');">Delete</button>
+                    </form>
+                    <% if (qrCode) { %>
+                        <button class="btn btn-primary" onclick="toggleQRCode()">Show QR Code</button>
+                        <div id="qr-code-popup" class="qr-code-popup" style="display: none;">
+                            <div class="qr-code-popup-content">
+                                <img src="<%= qrCode %>" alt="QR Code for Box" class="qr-code">
+                                <button class="btn btn-secondary" onclick="toggleQRCode()">Close QR Code</button>
+                            </div>
+                        </div>
+                    <% } %>
                 <% } else { %>
                     <p>Please <a href="/move_out/login?redirect=/move_out/view-box/<%= box.box_id %>">login</a> to edit or manage the content of your box.</p>
                 <% } %>
             </div>
         </div>
 
-        <!-- QR Code Button -->
-        <% if (qrCode) { %>
-            <div class="qr-code-btn-container">
-                <button class="btn btn-primary" onclick="toggleQRCode()">Show QR Code</button>
-            </div>
-            <div id="qr-code-popup" class="qr-code-popup" style="display: none;">
-                <div class="qr-code-popup-content">
-                    <img src="<%= qrCode %>" alt="QR Code for Box" class="qr-code">
-                    <button class="btn btn-secondary" onclick="toggleQRCode()">Close QR Code</button>
-                </div>
-            </div>
-        <% } %>
-        <form action="/move_out/delete-box/<%= box.box_id %>" method="POST" style="display: inline;">
-            <button type="submit" class="helix-btn helix-btn-danger" onclick="return confirm('Are you sure you want to delete this box?');">Delete</button>
-        </form>
+
         
 
     </div>

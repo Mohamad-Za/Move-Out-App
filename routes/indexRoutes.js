@@ -275,16 +275,8 @@ router.post('/login', async (req, res) => {
 });
 
 
-
-
-
-
-
-
-
-
 router.get('/dashboard', (req, res) => {
-    console.log('Session User:', req.session.user); 
+    // console.log('Session User:', req.session.user); 
     if (req.session.user) {
         let data = {
             title: 'Dashboard',
@@ -297,14 +289,10 @@ router.get('/dashboard', (req, res) => {
 });
 
 
-
-
 router.get('/logout', (req, res) => {
     req.session.destroy(); 
     res.redirect('/move_out/login');
 });
-
-
 
 
 router.get('/create-box', (req, res) => {
@@ -312,8 +300,6 @@ router.get('/create-box', (req, res) => {
     data.title = "Create New Box";
     res.render('move_out/pages/create_box.ejs', data);
 });
-
-
 
 
 const storage = multer.diskStorage({
@@ -339,16 +325,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-
-
-
-
-
-
-
-
 router.post('/create-box', upload.any(), async (req, res) => {
-    const { boxName, description, content_type, label_design, privacy } = req.body;
+    const { boxName, content_type, label_design, privacy } = req.body;
 
     try {
         const db = await getConnection();
@@ -372,8 +350,8 @@ router.post('/create-box', upload.any(), async (req, res) => {
         }
 
         
-        const sqlBox = 'INSERT INTO boxes (user_id, box_name, description, label_design, privacy, pin) VALUES (?, ?, ?, ?, ?, ?)';
-        const result = await db.query(sqlBox, [userId, boxName, description, labelName, privacy, pin]);
+        const sqlBox = 'INSERT INTO boxes (user_id, box_name, label_design, privacy, pin) VALUES (?, ?, ?, ?, ?)';
+        const result = await db.query(sqlBox, [userId, boxName, labelName, privacy, pin]);
         const boxId = result.insertId;
 
         
@@ -453,7 +431,6 @@ router.get('/view-boxes', async (req, res) => {
 });
 
 
-
 router.get('/view-box/:box_id', async (req, res) => {
     const { box_id } = req.params;
 
@@ -522,17 +499,13 @@ router.get('/view-box/:box_id', async (req, res) => {
 });
 
 
-
-
-
-
 router.get('/edit-box/:box_id', async (req, res) => {
     const { box_id } = req.params;
 
     try {
         const db = await getConnection();
 
-        
+        // Fetch box details
         const sqlBox = 'SELECT * FROM boxes WHERE box_id = ?';
         const boxes = await db.query(sqlBox, [box_id]);
 
@@ -542,11 +515,11 @@ router.get('/edit-box/:box_id', async (req, res) => {
 
         const box = boxes[0];
 
-        
+        // Fetch content related to this box
         const sqlContent = 'SELECT * FROM contents WHERE box_id = ?';
         const contents = await db.query(sqlContent, [box_id]);
 
-        
+        // Render the edit-box page, passing both box details and its content
         res.render('move_out/pages/edit-box.ejs', { box, contents, title: 'Edit Box' });
     } catch (err) {
         console.error('Error fetching box details:', err);
@@ -555,26 +528,30 @@ router.get('/edit-box/:box_id', async (req, res) => {
 });
 
 
-
-
-
 router.post('/edit-box/:box_id', upload.any(), async (req, res) => {
     const { box_id } = req.params;
-    const { boxName, description, content_type } = req.body;
+    const { boxName, content_type, updated_content, updated_content_id } = req.body;
 
     try {
         const db = await getConnection();
 
-        
-        const sqlUpdateBox = 'UPDATE boxes SET box_name = ?, description = ? WHERE box_id = ?';
-        await db.query(sqlUpdateBox, [boxName, description, box_id]);
+        // Update the box name
+        if (boxName) {
+            const sqlUpdateBox = 'UPDATE boxes SET box_name = ? WHERE box_id = ?';
+            await db.query(sqlUpdateBox, [boxName, box_id]);
+        }
 
-        
-        if (content_type === 'text' && req.body.new_content) {
+        // Check if existing text content is being updated
+        if (updated_content && updated_content_id) {
+            const sqlUpdateText = 'UPDATE contents SET content_data = ? WHERE content_id = ? AND content_type = "text"';
+            await db.query(sqlUpdateText, [updated_content, updated_content_id]);
+        } else if (content_type === 'text' && req.body.new_content) {
+            // Handle new text content
             const textContent = req.body.new_content;
             const sqlInsertText = 'INSERT INTO contents (box_id, content_type, content_data) VALUES (?, ?, ?)';
             await db.query(sqlInsertText, [box_id, 'text', textContent]);
         } else if (content_type === 'image' || content_type === 'audio') {
+            // Handle new image/audio content
             if (req.files && req.files.length > 0) {
                 for (const file of req.files) {
                     const contentPath = `/uploads/${file.filename}`;
@@ -590,9 +567,6 @@ router.post('/edit-box/:box_id', upload.any(), async (req, res) => {
         res.status(500).send('Error updating box');
     }
 });
-
-
-
 
 
 router.post('/delete-box/:box_id', async (req, res) => {
@@ -642,7 +616,11 @@ router.post('/delete-box/:box_id', async (req, res) => {
         const labelResult = await db.query(labelSql, [box_id]);
 
         const customLabel = labelResult[0] && labelResult[0].label_design;
-        if (customLabel && customLabel !== 'default') { 
+
+
+        const defaultLabels = ['design1', 'design2', 'design3'];
+        
+        if (customLabel && !defaultLabels.includes(customLabel)) { 
             const labelPath = path.join(__dirname, '..', 'public', 'images', `${customLabel}.jpg`);
             console.log(`Attempting to delete custom label: ${labelPath}`);
             if (fs.existsSync(labelPath)) {
@@ -654,6 +632,9 @@ router.post('/delete-box/:box_id', async (req, res) => {
         }
 
         
+        const deleteShareSql = 'DELETE FROM shared_labels WHERE box_id = ?';
+        await db.query(deleteShareSql, [box_id]);
+
         const deleteContentsSql = 'DELETE FROM contents WHERE box_id = ?';
         await db.query(deleteContentsSql, [box_id]);
 
@@ -670,10 +651,6 @@ router.post('/delete-box/:box_id', async (req, res) => {
         res.status(500).send('Error deleting box');
     }
 });
-
-
-
-
 
 
 
@@ -706,7 +683,6 @@ router.post('/remove-content/:content_id', async (req, res) => {
 });
 
 
-
 router.get('/profile', (req, res) => {
     const user = req.session.user;  
 
@@ -716,7 +692,6 @@ router.get('/profile', (req, res) => {
 
     res.render('move_out/pages/profile.ejs', { user, title: 'Profile' });
 });
-
 
 
 router.post('/edit-profile', upload.single('profileImage'), async (req, res) => {
@@ -757,14 +732,6 @@ router.post('/edit-profile', upload.single('profileImage'), async (req, res) => 
 
 
 
-
-
-
-
-
-
-
-
 router.post('/deactivate-account', async (req, res) => {
     const user_id = req.session.user.user_id;
     const email = req.session.user.email;
@@ -785,8 +752,6 @@ router.post('/deactivate-account', async (req, res) => {
         res.status(500).send('Error deactivating account');
     }
 });
-
-
 
 
 
@@ -856,6 +821,10 @@ router.get('/delete-account/:userId', async (req, res) => {
                 }
             }
 
+
+            const deleteShareSql = 'DELETE FROM shared_labels WHERE box_id = ?';
+            await db.query(deleteShareSql, [box_id]);
+            
             const deleteContentsSql = 'DELETE FROM contents WHERE box_id = ?';
             await db.query(deleteContentsSql, [boxId]);
 
@@ -884,14 +853,6 @@ router.get('/delete-account/:userId', async (req, res) => {
 });
 
 
-
-
-
-
-
-
-
-
 router.post('/share-label/:box_id', async (req, res) => {
     const { box_id } = req.params;
     const { email } = req.body;
@@ -911,9 +872,6 @@ router.post('/share-label/:box_id', async (req, res) => {
         res.status(500).send('Error sharing label');
     }
 });
-
-
-
 
 
 router.post('/access-private-box/:box_id', async (req, res) => {
@@ -946,7 +904,6 @@ router.post('/access-private-box/:box_id', async (req, res) => {
         res.status(500).send('Error accessing private box');
     }
 });
-
 
 
 router.post('/verify-pin/:box_id', async (req, res) => {
@@ -1008,8 +965,6 @@ router.get('/user/:user_id/boxes', async (req, res) => {
 });
 
 
-
-
 router.get('/shared-labels', async (req, res) => {
     const userEmail = req.session.user.email; 
 
@@ -1026,17 +981,9 @@ router.get('/shared-labels', async (req, res) => {
 });
 
 
-
-
-
-
-
-
 router.get('/admin', async (req, res) => {
         res.redirect('/move_out/admin/dashboard'); 
 });
-
-
 
 
 router.get('/admin/dashboard', async (req, res) => {
@@ -1055,22 +1002,6 @@ router.get('/admin/dashboard', async (req, res) => {
 });
 
 
-
-
-router.get('/admin/users', async (req, res) => {
-    try {
-        const users = await getAllUsers();
-        res.render('move_out/admin/dashboard.ejs', { users, title: 'All Users' });
-    } catch (error) {
-        console.error('Error fetching users:', error);
-        res.status(500).send('Error fetching users.');
-    }
-});
-
-
-
-
-// Route to render marketing email form
 router.get('/admin/send-marketing-email', (req, res) => {
     if (!req.session.user || !req.session.user.is_admin) {
         return res.redirect('/move_out/login');
@@ -1081,12 +1012,10 @@ router.get('/admin/send-marketing-email', (req, res) => {
 
 
 
-// POST route to send marketing email to all active users
 router.post('/admin/send-marketing-email', async (req, res) => {
     const { subject, content } = req.body;
 
     try {
-        // Call the sendMarketingEmail function to handle the email sending
         const result = await sendMarketingEmail(subject, content);
 
         if (result.success) {
@@ -1104,9 +1033,6 @@ router.post('/admin/send-marketing-email', async (req, res) => {
 
 
 
-
-
-
 router.post('/admin/activate-deactivate/:userId', async (req, res) => {
     const { userId } = req.params;
     console.log(`Request received for user ${req.params.userId}`);
@@ -1114,29 +1040,13 @@ router.post('/admin/activate-deactivate/:userId', async (req, res) => {
     try {
         const result = await toggleUserStatus(userId);
         if (result.success) {
-            res.redirect('/move_out/admin/users'); 
+            res.redirect('/move_out/admin/dashboard'); 
         }
     } catch (error) {
         console.error('Error updating user status:', error);
         res.status(500).send('Error updating user status');
     }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

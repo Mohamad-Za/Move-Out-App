@@ -43,23 +43,6 @@ async function createUser(email, password, name) {
     }
 }
 
-
-
-
-
-
-
-// user: 'mohammad.zahedi230@gmail.com',
-// pass: 'wodu puji kbuf mqvx' // Your app-specific password
-// }
-// });
-
-// const mailOptions = {
-// from: 'mohammad.zahedi230@gmail.com',
-// to: email,
-
-
-
 async function sendVerificationEmail(email, verificationCode) {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -218,34 +201,6 @@ async function sendDeletionEmail(email, userId) {
         throw error;
     }
 }
-
-
-
-
-// // Function to share a label with another user via email
-// async function shareLabelWithEmail(box_id, shared_with_email, shared_by_user_id) {
-//     const db = await getConnection();
-//     try {
-//         // Check if the email belongs to a registered user
-//         const userExists = await db.query('SELECT * FROM users WHERE email = ?', [shared_with_email]);
-
-//         if (userExists.length === 0) {
-//             throw new Error('User with this email does not exist.');
-//         }
-
-//         // Insert into shared_labels table
-//         const sql = 'INSERT INTO shared_labels (box_id, shared_with_email, shared_by_user_id) VALUES (?, ?, ?)';
-//         await db.query(sql, [box_id, shared_with_email, shared_by_user_id]);
-
-//         return { success: true, message: 'Label shared successfully!' };
-//     } catch (err) {
-//         console.error('Error sharing label:', err);
-//         return { success: false, message: err.message };
-//     } finally {
-//         await db.end();
-//     }
-// }
-
 
 
 async function sendShareNotificationEmail(email, box_id) {
@@ -483,7 +438,6 @@ passport.use(new GoogleStrategy({
 
 
 passport.serializeUser((user, done) => {
-    // console.log('Serializing user:', user); 
     done(null, user.user_id); 
 });
 
@@ -494,7 +448,6 @@ passport.deserializeUser(async (id, done) => {
     const user = await db.query('SELECT * FROM users WHERE user_id = ?', [id]);
 
     if (user.length > 0) {
-        // console.log('Deserializing user:', user[0]); 
         done(null, user[0]); 
     } else {
         done(new Error('User not found')); 
@@ -502,50 +455,13 @@ passport.deserializeUser(async (id, done) => {
 });
 
 
-
-
-
-
-
-// async function sendMarketingEmail(email) {
-//     const transporter = nodemailer.createTransport({
-//         service: 'gmail',
-//         auth: {
-//             user: 'mohammad.zahedi230@gmail.com',
-//             pass: 'wodu puji kbuf mqvx'
-//         }
-//     });
-
-//     const mailOptions = {
-//         from: 'mohammad.zahedi230@gmail.com',
-//         to: email,
-//         subject: 'Exciting Updates from Move Out',
-//         html: `<p>We have some exciting updates for you! Check them out at our website.</p>`
-//     };
-
-//     try {
-//         await transporter.sendMail(mailOptions);
-//         console.log('Marketing email sent to:', email);
-//     } catch (error) {
-//         console.error('Error sending marketing email:', error);
-//         throw error;
-//     }
-// }
-
-
-
-
-
-
 async function sendMarketingEmail(subject, content) {
     try {
         const db = await mysql.createConnection(config);
 
-        // Fetch all active users
         const sqlUsers = 'SELECT email FROM users WHERE status = "active"';
         const users = await db.query(sqlUsers);
 
-        // Set up email transport with nodemailer
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -554,14 +470,12 @@ async function sendMarketingEmail(subject, content) {
             }
         });
 
-        // Prepare email options
         const mailOptions = {
             from: 'mohammad.zahedi230@gmail.com',
             subject: subject,
             html: content
         };
 
-        // Send the email to each active user
         for (const user of users) {
             mailOptions.to = user.email;
             await transporter.sendMail(mailOptions);
@@ -573,11 +487,6 @@ async function sendMarketingEmail(subject, content) {
         return { success: false, error };
     }
 }
-
-
-
-
-
 
 
 async function toggleUserStatus(userId) {
@@ -600,34 +509,6 @@ async function toggleUserStatus(userId) {
         await db.end();
     }
 }
-
-
-
-
-
-
-// // Function to get storage usage for each user
-// async function getStorageUsage() {
-//     const db = await getConnection();
-//     try {
-//         // Query to get user storage usage
-//         const sql = `
-//             SELECT users.user_id, users.name, users.email, 
-//                    IFNULL(SUM(CHAR_LENGTH(contents.content_data)), 0) AS total_storage_usage
-//             FROM users
-//             LEFT JOIN boxes ON users.user_id = boxes.user_id
-//             LEFT JOIN contents ON boxes.box_id = contents.box_id
-//             GROUP BY users.user_id
-//         `;
-//         const results = await db.query(sql);
-//         return results;
-//     } catch (error) {
-//         console.error('Error fetching storage usage:', error);
-//         throw error;
-//     } finally {
-//         await db.end();
-//     }
-// }
 
 
 async function calculateStorageUsage(userId) {

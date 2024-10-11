@@ -4,7 +4,6 @@
   <div class="auth-container">
     <h2>Login to Your Account</h2>
 
-    <!-- Error Message Container -->
     <% if (typeof error !== 'undefined') { %>
       <div class="error-message">
         <% if (error === 'deactivated') { %>
@@ -26,13 +25,11 @@
     </div>
 
     <div class="google-auth">
-      <a href="/move_out/auth/google" class="google-btn">Sign In with Google</a>
+      <a href="/move_out/auth/google" class="login-with-google-btn">Sign In with Google</a>
     </div>
   </div>
 
-  <!-- Include JavaScript to pass error parameter from URL to render inline error -->
   <script>
-    // Get error parameter from URL
     const urlParams = new URLSearchParams(window.location.search);
     const error = urlParams.get('error');
 

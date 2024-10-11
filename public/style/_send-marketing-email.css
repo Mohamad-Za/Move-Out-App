@@ -1,0 +1,101 @@
+/* Styling for the Send Marketing Email Page */
+.marketing-email-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 40px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    text-align: center;
+}
+
+.marketing-email-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: #0072ff;
+    margin-bottom: 30px;
+}
+
+/* Form styling */
+.marketing-email-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center; 
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    width: 100%; 
+}
+
+.marketing-label {
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+
+.marketing-input,
+.marketing-textarea {
+    width: 100%; 
+    max-width: 500px; 
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9fafb;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.marketing-input:focus,
+.marketing-textarea:focus {
+    border-color: #0072ff;
+    background-color: #fff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 114, 255, 0.1);
+}
+
+.marketing-btn-primary {
+    padding: 14px;
+    background-color: #0072ff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%; 
+    max-width: 300px; 
+}
+
+.marketing-btn-primary:hover {
+    background-color: #005bb5;
+    box-shadow: 0 4px 12px rgba(0, 91, 181, 0.3);
+}
+
+@media (max-width: 768px) {
+    .marketing-email-container {
+        padding: 30px;
+    }
+
+    .marketing-email-title {
+        font-size: 24px;
+    }
+
+    .marketing-input,
+    .marketing-textarea {
+        max-width: 100%;
+    }
+
+    .marketing-btn-primary {
+        max-width: 100%;
+    }
+}
+
+
