@@ -308,6 +308,8 @@ const storage = multer.diskStorage({
             cb(null, 'public/profiles'); 
         } else if (file.fieldname === 'custom_label') {
             cb(null, 'public/images'); 
+        } else if (file.fieldname === 'insurance_logo') {
+            cb(null, 'public/insurance_logos');  
         } else {
             cb(null, 'public/uploads'); 
         }
@@ -350,8 +352,8 @@ router.post('/create-box', upload.any(), async (req, res) => {
         }
 
         
-        const sqlBox = 'INSERT INTO boxes (user_id, box_name, label_design, privacy, pin) VALUES (?, ?, ?, ?, ?)';
-        const result = await db.query(sqlBox, [userId, boxName, labelName, privacy, pin]);
+        const sqlBox = 'INSERT INTO boxes (user_id, box_name, label_design, privacy, pin, box_type) VALUES (?, ?, ?, ?, ?, ?)';
+        const result = await db.query(sqlBox, [userId, boxName, labelName, privacy, pin, 'normal']);
         const boxId = result.insertId;
 
         
@@ -406,13 +408,93 @@ router.post('/create-box', upload.any(), async (req, res) => {
 
 
 
+router.get('/create-insurance-box', (req, res) => {
+    let data = {};
+    data.title = "Create Insurance Box";
+    res.render('move_out/pages/create_insurance_box.ejs', data);
+});
+
+
+
+
+
+router.post('/create-insurance-box', upload.any(), async (req, res) => {
+    const { boxName, item_names, item_values, currency, label_design, privacy } = req.body;
+
+    try {
+        const db = await getConnection();
+        const userId = req.session.user.user_id;
+
+        // Handle pin for private boxes
+        let pin = null;
+        if (privacy === 'private') {
+            pin = Math.floor(100000 + Math.random() * 900000).toString();
+        }
+
+        // Handle custom label upload if selected
+        let finalLabelDesign = label_design;
+        const customLabelFile = req.files.find(file => file.fieldname === 'custom_label');
+        if (customLabelFile) {
+            finalLabelDesign = path.basename(customLabelFile.filename, '.jpg'); 
+        }
+
+        // Handle insurance company logo upload
+        let insuranceLogo = null;
+        const insuranceLogoFile = req.files.find(file => file.fieldname === 'insurance_logo');
+        if (insuranceLogoFile) {
+            insuranceLogo = `/insurance_logos/${insuranceLogoFile.filename}`;
+        }
+
+        // Insert the insurance box into the boxes table with the selected label design and logo
+        const sqlBox = 'INSERT INTO boxes (user_id, box_name, label_design, privacy, pin, box_type, insurance_logo) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        const result = await db.query(sqlBox, [userId, boxName, finalLabelDesign, privacy, pin, 'insurance', insuranceLogo]);
+        const boxId = result.insertId;
+
+        // Save items in the insurance_box_items table
+        for (let i = 0; i < item_names.length; i++) {
+            const sqlItem = 'INSERT INTO insurance_box_items (box_id, item_name, item_value, currency) VALUES (?, ?, ?, ?)';
+            await db.query(sqlItem, [boxId, item_names[i], parseFloat(item_values[i]), currency]);
+        }
+
+        // Generate QR Code
+        const qrCodeData = `http://localhost:3000/move_out/view-box/${boxId}`;
+        const qrCodeFilePath = path.join(__dirname, '..', 'public', 'qrcodes', `${boxId}.png`);
+
+        QRCode.toFile(qrCodeFilePath, qrCodeData, (err) => {
+            if (err) {
+                console.error('Error generating QR Code:', err);
+                return res.status(500).send('Error generating QR Code');
+            }
+        });
+
+        const sqlQrCode = 'INSERT INTO qr_codes (box_id, qr_code_data) VALUES (?, ?)';
+        await db.query(sqlQrCode, [boxId, `/qrcodes/${boxId}.png`]);
+
+        // Send PIN email if applicable
+        if (pin) {
+            await sendPinEmail(req.session.user.email, pin, boxName);
+        }
+
+        res.redirect(`/move_out/view-box/${boxId}`);
+    } catch (err) {
+        console.error('Error creating insurance box:', err);
+        res.status(500).send('Error creating insurance box');
+    }
+});
+
+
+
+
+
+
+
+
 
 
 router.get('/view-boxes', async (req, res) => {
     try {
         const db = await getConnection();
 
-        
         const sqlBoxes = `
             SELECT boxes.*, qr_codes.qr_code_data 
             FROM boxes 
@@ -422,7 +504,19 @@ router.get('/view-boxes', async (req, res) => {
         const userId = req.session.user.user_id; 
         const boxes = await db.query(sqlBoxes, [userId]);
 
-        
+
+        // Fetch the first three items for each insurance box
+        for (let box of boxes) {
+            if (box.box_type === 'insurance') {
+                const sqlItems = `
+                    SELECT item_name, item_value, currency 
+                    FROM insurance_box_items 
+                    WHERE box_id = ? 
+                    LIMIT 3`;
+                box.items = await db.query(sqlItems, [box.box_id]);
+            }
+        }
+
         res.render('move_out/pages/view-boxes.ejs', { boxes, title: 'My Boxes' });
     } catch (err) {
         console.error('Error fetching boxes:', err);
@@ -431,13 +525,14 @@ router.get('/view-boxes', async (req, res) => {
 });
 
 
+
 router.get('/view-box/:box_id', async (req, res) => {
     const { box_id } = req.params;
 
     try {
         const db = await getConnection();
 
-        
+        // Fetch box details
         const sqlBox = 'SELECT * FROM boxes WHERE box_id = ?';
         const boxes = await db.query(sqlBox, [box_id]);
 
@@ -447,9 +542,36 @@ router.get('/view-box/:box_id', async (req, res) => {
 
         const box = boxes[0];
 
-        
+        // Check if it's an insurance box based on box_type
+        if (box.box_type === 'insurance') {
+            // Fetch insurance items from the insurance_box_items table
+            const sqlItems = 'SELECT * FROM insurance_box_items WHERE box_id = ?';
+            const insuranceItems = await db.query(sqlItems, [box_id]);
+
+            // Fetch the QR code
+            const sqlQrCode = 'SELECT qr_code_data FROM qr_codes WHERE box_id = ?';
+            const qrCodeResult = await db.query(sqlQrCode, [box_id]);
+            const qrCode = qrCodeResult.length > 0 ? qrCodeResult[0].qr_code_data : null;
+
+            // Fetch the insurance company logo (optional)
+            let insuranceLogo = null;
+            const logoPath = `/uploads/${box.insurance_logo}`;
+            if (box.insurance_logo && fs.existsSync(path.join(__dirname, '..', 'public', logoPath))) {
+                insuranceLogo = logoPath;
+            }
+
+            return res.render('move_out/pages/insurance-box-details.ejs', { 
+                box, 
+                insuranceItems, 
+                insuranceLogo, 
+                qrCode, 
+                user: req.session.user,
+                title: 'Insurance Box Details' 
+            });
+        }
+
+        // Logic for normal boxes (existing code, unchanged)
         if (req.session.user && req.session.user.user_id === box.user_id) {
-            
             const sqlContent = 'SELECT * FROM contents WHERE box_id = ?';
             const contents = await db.query(sqlContent, [box_id]);
 
@@ -466,16 +588,13 @@ router.get('/view-box/:box_id', async (req, res) => {
             });
         }
 
-        
+        // Handling for private boxes (existing code, unchanged)
         if (box.privacy === 'private') {
-            
             if (!req.session.validPinForBox || req.session.validPinForBox !== box_id) {
-                
                 return res.render('move_out/pages/enter_pin.ejs', { box_id, title: 'Enter PIN', error: null });
             }
         }
 
-        
         const sqlContent = 'SELECT * FROM contents WHERE box_id = ?';
         const contents = await db.query(sqlContent, [box_id]);
 
@@ -483,7 +602,6 @@ router.get('/view-box/:box_id', async (req, res) => {
         const qrCodeResult = await db.query(sqlQrCode, [box_id]);
         const qrCode = qrCodeResult.length > 0 ? qrCodeResult[0].qr_code_data : null;
 
-        
         res.render('move_out/pages/box-details.ejs', { 
             box, 
             contents, 
@@ -497,6 +615,60 @@ router.get('/view-box/:box_id', async (req, res) => {
         res.status(500).send('Error fetching box details');
     }
 });
+
+
+
+
+
+
+
+// router.get('/view-insurance-box/:box_id', async (req, res) => {
+//     const { box_id } = req.params;
+
+//     try {
+//         const db = await getConnection();
+
+//         // Fetch the box details
+//         const sqlBox = 'SELECT * FROM boxes WHERE box_id = ?';
+//         const [box] = await db.query(sqlBox, [box_id]);
+
+//         if (!box) {
+//             return res.status(404).send('Insurance Box not found');
+//         }
+
+//         // Fetch the items for this insurance box
+//         const sqlItems = 'SELECT * FROM insurance_box_items WHERE box_id = ?';
+//         const insuranceItems = await db.query(sqlItems, [box_id]);
+
+//         // Fetch the insurance company logo (optional)
+//         let insuranceLogo = null;
+//         const logoPath = `/uploads/${box.insurance_logo}`;
+//         if (fs.existsSync(path.join(__dirname, '..', 'public', logoPath))) {
+//             insuranceLogo = logoPath;
+//         }
+
+//         // Fetch the QR code
+//         const sqlQrCode = 'SELECT qr_code_data FROM qr_codes WHERE box_id = ?';
+//         const [qrCodeResult] = await db.query(sqlQrCode, [box_id]);
+//         const qrCode = qrCodeResult ? qrCodeResult.qr_code_data : null;
+
+//         // Render the page and pass the title variable
+//         res.render('move_out/pages/insurance-box-details.ejs', {
+//             box,
+//             insuranceItems,
+//             insuranceLogo,
+//             qrCode,
+//             user: req.session.user,
+//             title: "Insurance Box Details"  // Add the title here
+//         });
+//     } catch (err) {
+//         console.error('Error fetching insurance box details:', err);
+//         res.status(500).send('Error fetching insurance box details');
+//     }
+// });
+
+
+
 
 
 router.get('/edit-box/:box_id', async (req, res) => {
@@ -784,7 +956,7 @@ router.get('/delete-account/:userId', async (req, res) => {
 
         const boxesSql = 'SELECT * FROM boxes WHERE user_id = ?';
         const boxes = await db.query(boxesSql, [userId]);
-
+        // Fixing box_id to boxId
         for (const box of boxes) {
             const boxId = box.box_id;
 
@@ -821,10 +993,9 @@ router.get('/delete-account/:userId', async (req, res) => {
                 }
             }
 
-
             const deleteShareSql = 'DELETE FROM shared_labels WHERE box_id = ?';
-            await db.query(deleteShareSql, [box_id]);
-            
+            await db.query(deleteShareSql, [boxId]);
+
             const deleteContentsSql = 'DELETE FROM contents WHERE box_id = ?';
             await db.query(deleteContentsSql, [boxId]);
 
@@ -838,7 +1009,7 @@ router.get('/delete-account/:userId', async (req, res) => {
         }
 
         const deleteUserSql = 'DELETE FROM users WHERE user_id = ?';
-        await db.query(deleteUserSql, [userId]);
+        await db.query(deleteUserSql, [userId]);    
         console.log('Deleting user with ID:', userId);
 
         let data = {
@@ -937,32 +1108,32 @@ router.post('/verify-pin/:box_id', async (req, res) => {
 
 
 
-router.get('/users', async (req, res) => {
-    try {
-        const users = await getAllUsers(); 
-        res.render('move_out/pages/users.ejs', { users, title: 'Users List' });
-    } catch (error) {
-        console.error('Error fetching users:', error);
-        res.status(500).send('Error fetching users.');
-    }
-});
+// router.get('/users', async (req, res) => {
+//     try {
+//         const users = await getAllUsers(); 
+//         res.render('move_out/pages/users.ejs', { users, title: 'Users List' });
+//     } catch (error) {
+//         console.error('Error fetching users:', error);
+//         res.status(500).send('Error fetching users.');
+//     }
+// });
 
-router.get('/user/:user_id/boxes', async (req, res) => {
-    const { user_id } = req.params;
+// router.get('/user/:user_id/boxes', async (req, res) => {
+//     const { user_id } = req.params;
 
-    try {
-        const boxes = await getPublicBoxesByUser(user_id); 
+//     try {
+//         const boxes = await getPublicBoxesByUser(user_id); 
         
-        if (boxes.length === 0) {
-            return res.render('move_out/pages/no_public_boxes.ejs', { title: 'No Public Boxes' });
-        }
+//         if (boxes.length === 0) {
+//             return res.render('move_out/pages/no_public_boxes.ejs', { title: 'No Public Boxes' });
+//         }
 
-        res.render('move_out/pages/public_boxes.ejs', { boxes, title: 'Public Boxes' });
-    } catch (error) {
-        console.error('Error fetching public boxes:', error);
-        res.status(500).send('Error fetching public boxes.');
-    }
-});
+//         res.render('move_out/pages/public_boxes.ejs', { boxes, title: 'Public Boxes' });
+//     } catch (error) {
+//         console.error('Error fetching public boxes:', error);
+//         res.status(500).send('Error fetching public boxes.');
+//     }
+// });
 
 
 router.get('/shared-labels', async (req, res) => {

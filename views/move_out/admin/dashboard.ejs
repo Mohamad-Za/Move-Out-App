@@ -1,57 +1,57 @@
 <%- include("./../partials/header.ejs") %>
 
-<div class="admin-dashboard-container">
-    <h2 class="admin-page-title">Admin Dashboard</h2>
+<div class="admin-dashboard-body">
+    <div class="admin-dashboard-container">
+        <h2 class="admin-page-title">Admin Dashboard</h2>
 
-    <div class="admin-table-container">
-        <table class="admin-table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Status</th>
-                    <th>Storage Usage (MB)</th>
-                    <th>Verified</th>
-                    <th>Created At</th>
-                    <th>Last Activity</th>
-                    <th>Actions</th>
-                    <th>Send Marketing Email</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% users.forEach(user => { %>
+        <div class="admin-table-container">
+            <table class="admin-table">
+                <thead>
                     <tr>
-                        <td><%= user.name %></td>
-                        <td><%= user.email %></td>
-                        <td><%= user.status %></td>
-                        <td><%= (user.storageUsage / (1024 * 1024)).toFixed(2) %> MB</td>
-                        <td><%= user.is_verified ? 'Yes' : 'No' %></td>
-                        <td><%= new Date(user.created_at).toLocaleDateString() %></td>
-                        <td><%= new Date(user.last_activity).toLocaleDateString() %></td>
-                        <td>
-                            <% if (!user.is_admin) { %>
-                                <form action="/move_out/admin/activate-deactivate/<%= user.user_id %>" method="POST">
-                                    <button type="submit" class="admin-action-btn">
-                                        <%= user.status === 'active' ? 'Deactivate' : 'Activate' %>
-                                    </button>
-                                </form>
-                            <% } else { %>
-                                <span class="admin-status">Admin</span>
-                            <% } %>
-                        </td>
-                        <td>
-                            <% if (!user.is_admin) { %>
-                                <a href="/move_out/admin/send-marketing-email" class="admin-button:hover">Send Email</a>
-                            <% } %>
-                        </td>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Storage Usage (MB)</th>
+                        <th>Verified</th>
+                        <th>Created At</th>
+                        <th>Last Activity</th>
+                        <th>Actions</th>
                     </tr>
-                <% }); %>
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    <% users.forEach(user => { %>
+                        <tr>
+                            <td><%= user.name %></td>
+                            <td><%= user.email %></td>
+                            <td class="<%= user.status === 'active' ? 'status-active' : 'status-inactive' %>">
+                                <%= user.status %>
+                            </td>
+                            <td><%= (user.storageUsage / (1024 * 1024)).toFixed(2) %> MB</td>
+                            <td><%= user.is_verified ? 'Yes' : 'No' %></td>
+                            <td><%= new Date(user.created_at).toLocaleDateString() %></td>
+                            <td><%= new Date(user.last_activity).toLocaleDateString() %></td>
+                            <td>
+                                <% if (!user.is_admin) { %>
+                                    <form action="/move_out/admin/activate-deactivate/<%= user.user_id %>" method="POST">
+                                        <button type="submit" class="admin-action-btn">
+                                            <%= user.status === 'active' ? 'Deactivate' : 'Activate' %>
+                                        </button>
+                                    </form>
+                                <% } else { %>
+                                    <span class="admin-status">Admin</span>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
 
-    <div class="admin-dashboard-actions">
-        <a href="/move_out/logout" class="btn btn-primary">Logout</a>
+        <!-- Admin Dashboard Actions Section -->
+        <div class="admin-dashboard-actions">
+            <a href="/move_out/admin/send-marketing-email" class="btn btn-secondary">Send Email</a>
+            <a href="/move_out/logout" class="btn btn-primary">Logout</a>
+        </div>
     </div>
 </div>
 

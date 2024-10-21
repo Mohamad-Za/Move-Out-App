@@ -1,0 +1,109 @@
+<%- include("./../partials/header.ejs") %>
+
+<body class="slide-in">
+    <div class="container create-box-page">
+        <h1>Create Your Insurance Box</h1>
+        <form action="/move_out/create-insurance-box" method="POST" enctype="multipart/form-data" class="create-box-form">
+            <div class="form-group">
+                <input type="text" name="boxName" class="form-input" placeholder=" " required>
+                <label class="form-label">Box Name</label>
+            </div>
+
+            <!-- Label Design Options -->
+            <div class="label-designs">
+                <h2>Choose a Label Design</h2>
+                <div class="label-options">
+                    <label class="label-card">
+                        <input type="radio" name="label_design" value="design1" checked>
+                        <div class="label-image">
+                            <img src="/images/design1.jpg" alt="Design 1" class="label-preview">
+                        </div>
+                        <span class="label-name">Design 1</span>
+                    </label>
+                    <label class="label-card">
+                        <input type="radio" name="label_design" value="design2">
+                        <div class="label-image">
+                            <img src="/images/design2.jpg" alt="Design 2" class="label-preview">
+                        </div>
+                        <span class="label-name">Design 2</span>
+                    </label>
+                    <label class="label-card">
+                        <input type="radio" name="label_design" value="design3">
+                        <div class="label-image">
+                            <img src="/images/design3.jpg" alt="Design 3" class="label-preview">
+                        </div>
+                        <span class="label-name">Design 3</span>
+                    </label>
+                    <label class="label-card">
+                        <input type="radio" name="label_design" value="custom" id="custom-label-radio">
+                        <div class="label-image" id="custom-label-preview" style="display: none;">
+                            <img src="" alt="Custom Label" class="label-preview" id="uploaded-label-preview">
+                        </div>
+                        <span class="label-name">Custom Design</span>
+                        <input type="file" name="custom_label" id="custom-label-upload" accept="image/*">
+                    </label>
+                </div>
+            </div>
+
+            <!-- Fields for adding items and their values -->
+            <div class="form-group">
+                <label for="items" class="form-label-select">Items</label>
+                <div id="item-list">
+                    <div class="item-entry">
+                        <input type="text" name="item_names[]" placeholder="Item Name" class="form-input" required>
+                        <input type="number" name="item_values[]" placeholder="Item Value" step="0.01" class="form-input" required>
+                    </div>
+                </div>
+                <button type="button" onclick="addItem()">Add More Items</button>
+            </div>
+
+            <div class="form-group">
+                <label for="currency" class="form-label-select">Currency</label>
+                <select name="currency" id="currency" class="form-input" required>
+                    <option value="SEK">SEK</option>
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="insurance-logo" class="form-label"></label>
+                <input type="file" name="insurance_logo" accept="image/*" class="form-input">
+            </div>
+
+            <button type="submit" class="btn-submit">Create Insurance Box</button>
+        </form>
+    </div>
+
+<%- include("./../partials/footer.ejs") %>
+
+<script>
+    function addItem() {
+        const itemList = document.getElementById("item-list");
+        const newItem = document.createElement("div");
+        newItem.classList.add("item-entry");
+        newItem.innerHTML = `
+            <input type="text" name="item_names[]" placeholder="Item Name" class="form-input" required>
+            <input type="number" name="item_values[]" placeholder="Item Value" step="0.01" class="form-input" required>
+        `;
+        itemList.appendChild(newItem);
+    }
+
+    const customLabelRadio = document.getElementById('custom-label-radio');
+    const customLabelUpload = document.getElementById('custom-label-upload');
+    const customLabelPreview = document.getElementById('custom-label-preview');
+    const uploadedLabelPreview = document.getElementById('uploaded-label-preview');
+
+    customLabelUpload.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                customLabelPreview.style.display = 'block';
+                uploadedLabelPreview.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+</body>

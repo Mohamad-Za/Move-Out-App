@@ -1,5 +1,5 @@
 <%- include("./../partials/header.ejs") %>
-
+<body class="dashboard-page"></body>
 <div class="dashboard-dashboard-container">
     <div class="profile-dropdown-container">
         <div class="profile-icon" onclick="toggleProfileWindow()">
@@ -27,13 +27,15 @@
     </div>
 
     <h1>Welcome, <%= user.name %>!</h1>
-    <p>Manage your moving boxes and profile here.</p>
 
     <div class="dashboard-dashboard-actions">
-        <a href="/move_out/create-box" class="dashboard-btn dashboard-btn-primary">Create New Box</a>
+        <!-- New Buttons for Creating Normal and Insurance Boxes -->
+        <a href="/move_out/create-box" class="dashboard-btn dashboard-btn-primary">Create Normal Box</a>
+        <a href="/move_out/create-insurance-box" class="dashboard-btn dashboard-btn-primary">Create Insurance Box</a>
+
         <a href="/move_out/view-boxes" class="dashboard-btn dashboard-btn-secondary">View My Boxes</a>
         <a href="/move_out/shared-labels" class="dashboard-btn dashboard-btn-secondary">View Shared Labels</a>
-        <a href="/move_out/users" class="dashboard-btn dashboard-btn-secondary">View All Users</a>
+        <!-- <a href="/move_out/users" class="dashboard-btn dashboard-btn-secondary">View All Users</a> -->
     </div>
 
     <div class="dashboard-dashboard-actions">

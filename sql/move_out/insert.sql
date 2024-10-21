@@ -1,24 +1,2 @@
--- LOAD DATA LOCAL INFILE 'users.csv'
--- INTO TABLE users
--- FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n'
--- IGNORE 1 LINES;
-
-
--- LOAD DATA LOCAL INFILE 'boxes.csv'
--- INTO TABLE boxes
--- FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n'
--- IGNORE 1 LINES;
-
-
--- LOAD DATA LOCAL INFILE 'contents.csv'
--- INTO TABLE contents
--- FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n'
--- IGNORE 1 LINES;
-
-
--- LOAD DATA LOCAL INFILE 'qr_codes.csv'
--- INTO TABLE qr_codes
--- FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n'
--- IGNORE 1 LINES;
-
-
+INSERT INTO users (name, email, password, is_verified, status, is_admin)
+VALUES ('Admin', 'admin@moveout.com', '$2a$10$e7.sYwkRY6qUGHy0io9Tv.P2sGcbDjMQMhkc2OOemPbYC3zf2AZUq', 1, 'active', 1);

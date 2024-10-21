@@ -1,11 +1,10 @@
-/* Edit Box Page Styles - Unique Classes */
 .edit-box-page {
     display: flex;
     justify-content: center;
     align-items: flex-start;
     min-height: 100vh;
     padding: 50px 20px;
-    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background for contrast */
+    background-color: rgba(0, 0, 0, 0.7); 
 }
 
 .edit-box-container {
@@ -14,9 +13,9 @@
     background-color: rgba(255, 255, 255, 0.9);
     padding: 50px;
     border-radius: 12px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9); /* Enhanced shadow */
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9); 
     animation: fadeIn 0.5s ease-in-out;
-    margin-top: 1000px; /* Moved down by 100px */
+    margin-top: 5px; 
 }
 
 
@@ -82,7 +81,6 @@
     border-radius: 8px;
 }
 
-/* Label Design Preview */
 .edit-box-label-preview {
     text-align: center;
     margin-top: 10px;
@@ -98,7 +96,6 @@
     border-radius: 8px;
 }
 
-/* Buttons */
 .edit-box-btn-primary {
     width: 100%;
     padding: 14px;

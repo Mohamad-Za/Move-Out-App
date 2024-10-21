@@ -2,24 +2,30 @@
 .admin-dashboard-body {
     background-color: #f5f7fa;
     font-family: 'Poppins', sans-serif;
-    padding: 40px;
+    height: 100vh; /* Full viewport height to center content vertically */
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 0;
+    padding: 0;
 }
 
 /* Admin Dashboard Container */
 .admin-dashboard-container {
     background: #ffffff;
-    padding: 30px;
+    padding: 40px;
     border-radius: 12px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Dashboard Title */
-.admin-dashboard-title {
+.admin-page-title {
     text-align: center;
     font-size: 2.5rem;
     color: #5d6671;
@@ -27,34 +33,40 @@
     font-weight: 700;
 }
 
+/* Admin Table Container */
+.admin-table-container {
+    overflow-x: auto;
+    width: 100%;
+}
+
 /* User Table Styling */
-.admin-user-table {
+.admin-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    font-size: 1rem;
+    text-align: left;
 }
 
-.admin-user-table th,
-.admin-user-table td {
+.admin-table th, .admin-table td {
     padding: 15px;
     text-align: center;
-    font-size: 1rem;
     border-bottom: 1px solid #ddd;
     transition: background-color 0.3s ease;
 }
 
-.admin-user-table th {
+.admin-table th {
     background-color: #5d6671;
     color: white;
     font-weight: 600;
 }
 
-.admin-user-table tr:nth-child(even) {
+.admin-table tr:nth-child(even) {
     background-color: #f8f8f8;
 }
 
-.admin-user-table tr:hover {
+.admin-table tr:hover {
     background-color: #f1f5ff;
 }
 
@@ -98,4 +110,25 @@
 
 .admin-button:hover {
     background-color: #005bb5;
+}
+
+/* Admin Dashboard Actions */
+.admin-dashboard-actions {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.admin-dashboard-actions .btn {
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.admin-dashboard-actions .btn:hover {
+    background-color: #0056b3;
 }

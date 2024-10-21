@@ -1,11 +1,12 @@
+@import url('_view-boxes.css');
 @import url('_base.css');
 @import url('_auth.css');
 @import url('_dashboard.css');
 @import url('_create-box.css');
-@import url('_view-boxes.css');
 @import url('_box-details.css');
 @import url('_edit-box.css');
-@import url('_users.css');
 @import url('_admin-dashboard.css');
 @import url('_verify.css');
 @import url('_send-to-verify.css');
+@import url('_insurance-box-details.css');
+@import url('_send-marketing-email.css');

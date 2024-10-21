@@ -1,5 +1,4 @@
-/* General Body Styling */
-body {
+.auth-page {
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(to right, #ffffff, #7a7979);
     display: flex;
@@ -9,7 +8,8 @@ body {
     margin: 0;
 }
 
-/* Container for the Auth Pages */
+
+
 .auth-container {
     background: rgba(255, 255, 255, 0.9);
     padding: 40px;
@@ -20,7 +20,6 @@ body {
     text-align: center;
 }
 
-/* Heading for both pages */
 .auth-container h2 {
     font-size: 2.2rem;
     color: #0072ff;
@@ -28,7 +27,6 @@ body {
     font-weight: 600;
 }
 
-/* Input Fields */
 .auth-container input[type="email"],
 .auth-container input[type="password"],
 .auth-container input[type="text"] {
@@ -50,7 +48,6 @@ body {
     box-shadow: 0px 0px 8px rgba(0, 114, 255, 0.2);
 }
 
-/* Submit Button */
 .auth-container input[type="submit"] {
     width: 100%;
     padding: 15px;
@@ -68,7 +65,6 @@ body {
     background-color: #005bb5;
 }
 
-/* Links for Register and Login Pages */
 .auth-container .auth-footer {
     margin-top: 20px;
     font-size: 0.9rem;
@@ -87,7 +83,6 @@ body {
     text-decoration: underline;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .auth-container {
         padding: 30px;
@@ -98,13 +93,6 @@ body {
     }
 }
 
-/* 
-.error-message {
-    color: red;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
- */
 
 .error-message {
     color: #ff4d4d;
@@ -115,12 +103,8 @@ body {
     margin-bottom: 15px;
     text-align: center;
 }
-  
 
 
-
-
-/* Google */
 .login-with-google-btn {
     transition: background-color .3s, box-shadow .3s;
       

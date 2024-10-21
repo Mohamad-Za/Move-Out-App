@@ -279,18 +279,18 @@ async function getAllUsers() {
 
 
 
-async function getPublicBoxesByUser(userId) {
-    const db = await getConnection();
-    try {
-        const sql = 'SELECT * FROM boxes WHERE user_id = ? AND privacy = "public"'; // Public boxes only
-        const boxes = await db.query(sql, [userId]);
-        return boxes;
-    } catch (error) {
-        throw error;
-    } finally {
-        await db.end();
-    }
-}
+// async function getPublicBoxesByUser(userId) {
+//     const db = await getConnection();
+//     try {
+//         const sql = 'SELECT * FROM boxes WHERE user_id = ? AND privacy = "public"'; // Public boxes only
+//         const boxes = await db.query(sql, [userId]);
+//         return boxes;
+//     } catch (error) {
+//         throw error;
+//     } finally {
+//         await db.end();
+//     }
+// }
 
 
 
@@ -545,7 +545,7 @@ module.exports = {
     sendShareNotificationEmail,
     sendPinEmail,
     getAllUsers,
-    getPublicBoxesByUser,
+    // getPublicBoxesByUser,
     getSharedLabelsByEmail,
     updateLastActivity,
     sendReminderEmails,

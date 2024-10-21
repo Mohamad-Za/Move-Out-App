@@ -12,21 +12,56 @@
                         <div class="helix-box-content">
                             <div class="helix-box-header">
                                 <h3 class="helix-box-title"><%= box.box_name %></h3>
+                                
+                                <!-- Show box type (optional) -->
+                                <% if (box.box_type === 'insurance') { %>
+                                    <p class="helix-box-type">Insurance Box</p>
+                                <% } else { %>
+                                    <p class="helix-box-type">Normal Box</p>
+                                <% } %>
+
                                 <p class="helix-box-description"><%= box.description %></p>
                             </div>
 
-                            <% if (box.qr_code_data) { %>
-                                <div class="helix-qr-code-container">
-                                    <img src="<%= box.qr_code_data %>" alt="QR Code for <%= box.box_name %>" class="helix-qr-code">
+                            <% if (box.box_type === 'insurance' && box.items && box.items.length > 0) { %>
+                                <div class="helix-insurance-items">
+                                    <ul>
+                                        <% box.items.forEach(item => { %>
+                                            <li><strong><%= item.item_name %></strong> - <%= item.item_value %> <%= item.currency %></li>
+                                        <% }); %>
+                                    </ul>
                                 </div>
                             <% } %>
+                            
+                            <div class="helix-qr-logo-container">
+                                <% if (box.qr_code_data) { %>
+                                    <div class="helix-qr-code-container">
+                                        <img src="<%= box.qr_code_data %>" alt="QR Code for <%= box.box_name %>" class="helix-qr-code">
+                                    </div>
+                                <% } %>
+
+                                <% if (box.box_type === 'insurance' && box.insurance_logo) { %>
+                                    <div class="helix-insurance-logo-container">
+                                        <img src="<%= box.insurance_logo %>" alt="Insurance Logo for <%= box.box_name %>" class="helix-insurance-logo">
+                                    </div>
+                                <% } %>
+                            </div>
+
+                            
 
                             <div class="helix-box-actions">
                                 <a href="/move_out/view-box/<%= box.box_id %>" class="helix-btn helix-btn-primary">View Details</a>
                                 <% if (box.qr_code_data) { %>
-                                    <button class="helix-btn helix-btn-secondary" onclick="printQRCode('<%= box.qr_code_data %>')">Print QR Code</button>
+                                    <button class="helix-btn helix-btn-secondary" 
+                                        onclick="printQRCode('<%= box.qr_code_data %>', '<%= box.box_name %>', '<%= box.box_type %>', '<%= box.label_design %>'<% if (box.box_type === 'insurance') { %>, '<%= box.insurance_logo %>', <%= JSON.stringify(box.items) %> <% } else { %>, null, [] <% } %>)">
+                                        Print QR Code & Info
+                                    </button>
                                 <% } %>
                             </div>
+                            
+                            
+
+
                         </div>
                     </div>
                 <% }); %>
@@ -40,16 +75,46 @@
         </div>
     </div>
 
+
+
     <script>
-        function printQRCode(qrCodeUrl) {
-            const printWindow = window.open('', '', 'width=600,height=400');
-            printWindow.document.write('<html><head><title>Print QR Code</title></head><body>');
-            printWindow.document.write(`<img src="${qrCodeUrl}" alt="QR Code">`);
+        function printQRCode(qrCodeUrl, boxName, boxType, labelDesign, insuranceLogo = null, items = []) {
+            const printWindow = window.open('', '', 'width=800,height=600');
+            printWindow.document.write('<html><head><title>Print Box Information</title></head><body>');
+            
+            // Add background image using label design
+            printWindow.document.write(`<div style="background-image: url('/images/${labelDesign}.jpg'); background-size: cover; padding: 20px;">`);
+            
+            // Display Box Name and Type
+            printWindow.document.write(`<h1>Box Name: ${boxName}</h1>`);
+            printWindow.document.write(`<h2>Box Type: ${boxType}</h2>`);
+            
+            // Display QR Code
+            printWindow.document.write(`<div><img src="${qrCodeUrl}" alt="QR Code for ${boxName}" style="max-width: 200px;"></div>`);
+            
+            // Display Insurance Logo (only if box is of type 'insurance' and logo is provided)
+            if (insuranceLogo && boxType === 'insurance') {
+                printWindow.document.write(`<div><img src="${insuranceLogo}" alt="Insurance Logo" style="max-width: 100px;"></div>`);
+            }
+            
+            // Display Items (only if box is of type 'insurance' and items are provided)
+            if (items.length > 0 && boxType === 'insurance') {
+                printWindow.document.write('<ul>');
+                items.forEach(item => {
+                    printWindow.document.write(`<li><strong>${item.item_name}</strong> - ${item.item_value} ${item.currency}</li>`);
+                });
+                printWindow.document.write('</ul>');
+            }
+    
+            printWindow.document.write('</div>');  // Close the background div
             printWindow.document.write('</body></html>');
             printWindow.document.close();
             printWindow.print();
         }
     </script>
+    
+    
+    
 
 <%- include("./../partials/footer.ejs") %>
 </body>

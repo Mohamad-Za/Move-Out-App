@@ -1,0 +1,84 @@
+<%- include("./../partials/header.ejs") %>
+
+<head>
+    <link rel="stylesheet" href="/styles/insurance-box-details.css">
+</head>
+
+<body class="slide-in" style="background-image: url('/images/<%= box.label_design %>.jpg'); background-size: cover; background-position: center;">
+    <div class="insurance-box-details-overlay"></div> 
+    <div class="insurance-box-details-container">
+        
+        <h2 class="insurance-page-title">Insurance Box Details</h2>
+        
+        <div class="insurance-box-content">
+            <div class="insurance-box-header">
+                <h3 class="insurance-box-title"><%= box.box_name %></h3>
+                <p class="insurance-box-created">Created on: <%= new Date(box.created_at).toLocaleString() %></p>
+            </div>
+
+            <div class="insurance-box-content-display insurance-scrollable-content">
+                <!-- Display each insurance item with its value -->
+                <h3>Items and Values</h3>
+                <% insuranceItems.forEach(item => { %>
+                    <div class="insurance-content-card">
+                        <p><strong>Item:</strong> <%= item.item_name %></p>
+                        <p><strong>Value:</strong> <%= item.item_value %> <%= item.currency %></p>
+                    </div>
+                <% }); %>
+            </div>
+
+            <div class="insurance-logo-qr-section">
+                <% if (box.insurance_logo) { %>
+                    <div class="insurance-logo-section">
+                        <h3>Insurance Company Logo</h3>
+                        <img src="<%= box.insurance_logo %>" alt="Insurance Company Logo" class="insurance-logo">
+                    </div>
+                <% } %>
+
+                <% if (qrCode) { %>
+                    <div class="insurance-qr-code-btn-container">
+                        <button class="btn btn-primary" onclick="toggleQRCode()">Show QR Code</button>
+                        <div id="qr-code-popup" class="insurance-qr-code-popup" style="display: none;">
+                            <div class="insurance-qr-code-popup-content">
+                                <img src="<%= qrCode %>" alt="QR Code for Insurance Box" class="insurance-qr-code">
+                                <button class="btn btn-secondary" onclick="toggleQRCode()">Close QR Code</button>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+
+            <div class="share-label-section">
+                <% if (user) { %>
+                <h3>Share this Insurance Box</h3>
+                <form action="/move_out/share-label/<%= box.box_id %>" method="POST" class="share-label-form">
+                    <input type="email" name="email" placeholder="Enter email to share with" class="share-label-input" required>
+                    <button type="submit" class="btn btn-primary share-btn">Share</button>
+                </form>
+                <% } %>
+            </div>
+
+<           <!-- Minimal changes for button alignment -->
+            <div class="insurance-box-action-buttons">
+                <a href="/move_out/edit-box/<%= box.box_id %>" class="btn btn-primary">Edit Insurance Box</a>
+                <a href="/move_out/view-boxes" class="btn btn-secondary">Back to Boxes</a>
+                <form action="/move_out/delete-box/<%= box.box_id %>" method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-secondary" onclick="return confirm('Are you sure you want to delete this insurance box?');">Delete</button>
+                </form>
+            </div>>
+        </div>
+    </div>
+
+<%- include("./../partials/footer.ejs") %>
+
+<script>
+    function toggleQRCode() {
+        const qrCodePopup = document.getElementById('qr-code-popup');
+        if (qrCodePopup.style.display === 'none' || qrCodePopup.style.display === '') {
+            qrCodePopup.style.display = 'block';
+        } else {
+            qrCodePopup.style.display = 'none';
+        }
+    }
+</script>
+</body>
