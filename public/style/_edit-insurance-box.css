@@ -1,0 +1,202 @@
+/* General Page Styles */
+.edit-insurance-box-page {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 50px 20px;
+    background-color: rgba(0, 0, 0, 0.7); 
+}
+
+.edit-insurance-box-container {
+    width: 100%;
+    max-width: 950px;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 50px;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9); 
+    animation: fadeIn 0.5s ease-in-out;
+    margin-top: 5px; 
+}
+
+/* Header Styling */
+.edit-insurance-box-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.edit-insurance-box-title {
+    font-size: 32px;
+    color: #333;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+/* Form Group Styles */
+.edit-insurance-box-group {
+    margin-bottom: 25px;
+}
+
+.edit-insurance-box-label {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 8px;
+    display: block;
+    font-weight: 500;
+}
+
+.edit-insurance-box-input,
+.edit-insurance-box-select {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.edit-insurance-box-input:focus {
+    border-color: #007bff;
+    background-color: #fff;
+    outline: none;
+}
+
+.edit-insurance-box-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.edit-insurance-box-file-input {
+    margin-top: 15px;
+    padding: 12px;
+    font-size: 16px;
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+/* Label Preview */
+.insurance-logo-preview {
+    text-align: center;
+    margin-top: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.insurance-logo-image {
+    width: 100%;
+    max-width: 150px;
+    height: auto;
+    border-radius: 8px;
+}
+
+/* Button Styles */
+.edit-insurance-box-btn-primary {
+    width: 100%;
+    padding: 14px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.edit-insurance-box-btn-primary:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.edit-insurance-box-btn-danger {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.edit-insurance-box-btn-danger:hover {
+    background-color: #c82333;
+}
+
+.edit-insurance-box-btn-secondary {
+    display: inline-block;
+    padding: 12px 20px;
+    background-color: #6c757d;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.edit-insurance-box-btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+/* Existing Items Styles */
+.edit-insurance-box-items {
+    margin-top: 40px;
+}
+
+.edit-insurance-box-items-title {
+    font-size: 22px;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.edit-insurance-item {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.edit-insurance-item label {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.edit-insurance-item input {
+    margin-bottom: 10px;
+}
+
+/* Checkbox styling */
+.edit-insurance-box-label input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .edit-insurance-box-container {
+        padding: 30px;
+    }
+
+    .edit-insurance-box-title {
+        font-size: 28px;
+    }
+
+    .insurance-logo-image {
+        max-width: 120px;
+    }
+}

@@ -495,6 +495,9 @@ router.get('/view-boxes', async (req, res) => {
     try {
         const db = await getConnection();
 
+
+
+
         const sqlBoxes = `
             SELECT boxes.*, qr_codes.qr_code_data 
             FROM boxes 
@@ -503,6 +506,13 @@ router.get('/view-boxes', async (req, res) => {
         `;
         const userId = req.session.user.user_id; 
         const boxes = await db.query(sqlBoxes, [userId]);
+
+        const sqlUser = 'SELECT status FROM users WHERE user_id = ?';
+        const userResult = await db.query(sqlUser, [userId]);
+
+        if (userResult.length === 0 || userResult[0].status !== 'active') {
+            return res.status(403).send('Your account is deactivated.');
+        }
 
 
         // Fetch the first three items for each insurance box
@@ -677,7 +687,6 @@ router.get('/edit-box/:box_id', async (req, res) => {
     try {
         const db = await getConnection();
 
-        // Fetch box details
         const sqlBox = 'SELECT * FROM boxes WHERE box_id = ?';
         const boxes = await db.query(sqlBox, [box_id]);
 
@@ -687,11 +696,16 @@ router.get('/edit-box/:box_id', async (req, res) => {
 
         const box = boxes[0];
 
-        // Fetch content related to this box
+        if (box.box_type === 'insurance') {
+            const sqlItems = 'SELECT * FROM insurance_box_items WHERE box_id = ?';
+            const items = await db.query(sqlItems, [box_id]);
+
+            return res.render('move_out/pages/edit-insurance-box.ejs', { box, items, title: 'Edit Insurance Box' });
+        }
+
         const sqlContent = 'SELECT * FROM contents WHERE box_id = ?';
         const contents = await db.query(sqlContent, [box_id]);
 
-        // Render the edit-box page, passing both box details and its content
         res.render('move_out/pages/edit-box.ejs', { box, contents, title: 'Edit Box' });
     } catch (err) {
         console.error('Error fetching box details:', err);
@@ -700,12 +714,23 @@ router.get('/edit-box/:box_id', async (req, res) => {
 });
 
 
+
 router.post('/edit-box/:box_id', upload.any(), async (req, res) => {
     const { box_id } = req.params;
-    const { boxName, content_type, updated_content, updated_content_id } = req.body;
+    const { boxName, content_type, updated_content, updated_content_id, item_names, item_values, item_ids, new_item_names, new_item_values, delete_items } = req.body;
 
     try {
         const db = await getConnection();
+
+        // Fetch box details to check the box type
+        const sqlBox = 'SELECT * FROM boxes WHERE box_id = ?';
+        const boxes = await db.query(sqlBox, [box_id]);
+
+        if (boxes.length === 0) {
+            return res.status(404).send('Box not found');
+        }
+
+        const box = boxes[0];
 
         // Update the box name
         if (boxName) {
@@ -713,22 +738,61 @@ router.post('/edit-box/:box_id', upload.any(), async (req, res) => {
             await db.query(sqlUpdateBox, [boxName, box_id]);
         }
 
-        // Check if existing text content is being updated
-        if (updated_content && updated_content_id) {
-            const sqlUpdateText = 'UPDATE contents SET content_data = ? WHERE content_id = ? AND content_type = "text"';
-            await db.query(sqlUpdateText, [updated_content, updated_content_id]);
-        } else if (content_type === 'text' && req.body.new_content) {
-            // Handle new text content
-            const textContent = req.body.new_content;
-            const sqlInsertText = 'INSERT INTO contents (box_id, content_type, content_data) VALUES (?, ?, ?)';
-            await db.query(sqlInsertText, [box_id, 'text', textContent]);
-        } else if (content_type === 'image' || content_type === 'audio') {
-            // Handle new image/audio content
-            if (req.files && req.files.length > 0) {
-                for (const file of req.files) {
-                    const contentPath = `/uploads/${file.filename}`;
-                    const sqlInsertFile = 'INSERT INTO contents (box_id, content_type, content_data) VALUES (?, ?, ?)';
-                    await db.query(sqlInsertFile, [box_id, content_type, contentPath]);
+        // Handle updates based on box type
+        if (box.box_type === 'insurance') {
+            // Update items in the insurance_box_items table
+            if (item_ids && item_names && item_values) {
+                for (let i = 0; i < item_ids.length; i++) {
+                    const sqlUpdateItem = 'UPDATE insurance_box_items SET item_name = ?, item_value = ? WHERE item_id = ?';
+                    await db.query(sqlUpdateItem, [item_names[i], item_values[i], item_ids[i]]);
+                }
+            }
+
+            // Handle deleting items if any are marked for deletion
+            if (delete_items && Array.isArray(delete_items)) {
+                for (const item_id of delete_items) {
+                    const sqlDeleteItem = 'DELETE FROM insurance_box_items WHERE item_id = ?';
+                    await db.query(sqlDeleteItem, [item_id]);
+                }
+            }
+
+            // Handle adding new items to the insurance_box_items table
+            if (new_item_names && new_item_values && Array.isArray(new_item_names)) {
+                for (let i = 0; i < new_item_names.length; i++) {
+                    if (new_item_names[i] && new_item_values[i]) {
+                        const sqlInsertNewItem = 'INSERT INTO insurance_box_items (box_id, item_name, item_value) VALUES (?, ?, ?)';
+                        await db.query(sqlInsertNewItem, [box_id, new_item_names[i], new_item_values[i]]);
+                    }
+                }
+            }
+
+            // Handle insurance logo update if provided
+            const insuranceLogo = req.files.find(file => file.fieldname === 'insurance_logo');
+            if (insuranceLogo) {
+                const logoPath = `/insurance_logos/${insuranceLogo.filename}`;
+                const sqlUpdateLogo = 'UPDATE boxes SET insurance_logo = ? WHERE box_id = ?';
+                await db.query(sqlUpdateLogo, [logoPath, box_id]);
+            }
+
+        } else {
+            // Handle updates for normal boxes
+            // Check if existing text content is being updated
+            if (updated_content && updated_content_id) {
+                const sqlUpdateText = 'UPDATE contents SET content_data = ? WHERE content_id = ? AND content_type = "text"';
+                await db.query(sqlUpdateText, [updated_content, updated_content_id]);
+            } else if (content_type === 'text' && req.body.new_content) {
+                // Handle new text content
+                const textContent = req.body.new_content;
+                const sqlInsertText = 'INSERT INTO contents (box_id, content_type, content_data) VALUES (?, ?, ?)';
+                await db.query(sqlInsertText, [box_id, 'text', textContent]);
+            } else if (content_type === 'image' || content_type === 'audio') {
+                // Handle new image/audio content
+                if (req.files && req.files.length > 0) {
+                    for (const file of req.files) {
+                        const contentPath = `/uploads/${file.filename}`;
+                        const sqlInsertFile = 'INSERT INTO contents (box_id, content_type, content_data) VALUES (?, ?, ?)';
+                        await db.query(sqlInsertFile, [box_id, content_type, contentPath]);
+                    }
                 }
             }
         }
@@ -739,6 +803,11 @@ router.post('/edit-box/:box_id', upload.any(), async (req, res) => {
         res.status(500).send('Error updating box');
     }
 });
+
+
+
+
+
 
 
 router.post('/delete-box/:box_id', async (req, res) => {
