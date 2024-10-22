@@ -1,5 +1,4 @@
 
-/* General Styling */
 body {
     background-color: #f9fafb;
     font-family: 'Montserrat', sans-serif;
@@ -8,7 +7,6 @@ body {
     color: #333;
 }
 
-/* Container for Create Box Page */
 .create-box-page {
     max-width: 900px;
     margin: 50px auto;
@@ -18,7 +16,6 @@ body {
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 }
 
-/* Title Styling */
 h1 {
     font-size: 36px;
     color: #3f51b5;
@@ -26,7 +23,6 @@ h1 {
     margin-bottom: 30px;
 }
 
-/* Form Group */
 .form-group {
     position: relative;
     margin-bottom: 40px;

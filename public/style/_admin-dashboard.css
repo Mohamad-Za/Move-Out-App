@@ -1,8 +1,7 @@
-/* Admin Dashboard Body */
 .admin-dashboard-body {
     background-color: #f5f7fa;
     font-family: 'Poppins', sans-serif;
-    height: 100vh; /* Full viewport height to center content vertically */
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -10,7 +9,6 @@
     padding: 0;
 }
 
-/* Admin Dashboard Container */
 .admin-dashboard-container {
     background: #ffffff;
     padding: 40px;
@@ -24,7 +22,6 @@
     justify-content: center;
 }
 
-/* Dashboard Title */
 .admin-page-title {
     text-align: center;
     font-size: 2.5rem;
@@ -33,13 +30,11 @@
     font-weight: 700;
 }
 
-/* Admin Table Container */
 .admin-table-container {
     overflow-x: auto;
     width: 100%;
 }
 
-/* User Table Styling */
 .admin-table {
     width: 100%;
     border-collapse: collapse;
@@ -70,7 +65,6 @@
     background-color: #f1f5ff;
 }
 
-/* Status Colors */
 .status-active {
     color: green;
     font-weight: 600;
@@ -81,7 +75,6 @@
     font-weight: 600;
 }
 
-/* Admin Action Buttons */
 .admin-action-btn {
     padding: 10px 20px;
     border-radius: 8px;
@@ -96,7 +89,6 @@
     background-color: #45a049;
 }
 
-/* Admin Button Styling */
 .admin-button {
     display: inline-block;
     padding: 10px 15px;
@@ -112,7 +104,6 @@
     background-color: #005bb5;
 }
 
-/* Admin Dashboard Actions */
 .admin-dashboard-actions {
     margin-top: 20px;
     text-align: center;

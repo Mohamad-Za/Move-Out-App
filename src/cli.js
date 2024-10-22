@@ -70,38 +70,6 @@ async function sendVerificationEmail(email, verificationCode) {
 }
 
 
-
-
-// async function verifyUserToken(verificationToken) {
-//     const db = await getConnection();
-//     try {
-//         // Find the user in unverified_users by token
-//         const sql = 'SELECT * FROM unverified_users WHERE verification_token = ? AND token_expiration > ?';
-//         const result = await db.query(sql, [verificationToken, Date.now()]);
-
-//         if (result.length === 0) {
-//             return { success: false, message: 'Invalid or expired verification token.' };
-//         }
-
-//         const user = result[0];
-
-//         // Move the user to the users table (including name)
-//         const insertSql = 'INSERT INTO users (name, email, password, is_verified) VALUES (?, ?, ?, 1)';
-//         await db.query(insertSql, [user.name, user.email, user.password]);
-
-//         // Delete the user from unverified_users
-//         const deleteSql = 'DELETE FROM unverified_users WHERE id = ?';
-//         await db.query(deleteSql, [user.id]);
-
-//         return { success: true, message: 'Email successfully verified! You can now log in.' };
-//     } catch (err) {
-//         console.error('Error verifying user:', err);
-//         throw err;
-//     } finally {
-//         await db.end();
-//     }
-// }
-
 async function verifyUserCode(verificationCode) {
     const db = await getConnection();
     try {
@@ -128,7 +96,6 @@ async function verifyUserCode(verificationCode) {
         await db.end();
     }
 }
-
 
 
 async function authenticateUser(email, password) {
@@ -167,9 +134,6 @@ async function authenticateUser(email, password) {
         await db.end();
     }
 }
-
-
-
 
 
 async function sendDeletionEmail(email, userId) {
@@ -276,24 +240,6 @@ async function getAllUsers() {
 }
 
 
-
-
-
-// async function getPublicBoxesByUser(userId) {
-//     const db = await getConnection();
-//     try {
-//         const sql = 'SELECT * FROM boxes WHERE user_id = ? AND privacy = "public"'; // Public boxes only
-//         const boxes = await db.query(sql, [userId]);
-//         return boxes;
-//     } catch (error) {
-//         throw error;
-//     } finally {
-//         await db.end();
-//     }
-// }
-
-
-
 async function getSharedLabelsByEmail(email) {
     const db = await getConnection();
     try {
@@ -377,7 +323,8 @@ async function sendReminderEmails() {
         const sql = `
             SELECT email, user_id
             FROM users
-            WHERE last_activity < NOW() - INTERVAL 1 DAY
+            WHERE last_activity < NOW() - INTERVAL 23 DAY 
+            AND last_activity > NOW() - INTERVAL 30 DAY
             AND status = 'active'
         `;
         const users = await db.query(sql);
@@ -545,7 +492,6 @@ module.exports = {
     sendShareNotificationEmail,
     sendPinEmail,
     getAllUsers,
-    // getPublicBoxesByUser,
     getSharedLabelsByEmail,
     updateLastActivity,
     sendReminderEmails,
