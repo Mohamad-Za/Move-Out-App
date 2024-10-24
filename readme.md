@@ -1,7 +1,7 @@
 # MoveOut Project - README
 
 Welcome to the MoveOut project! This README file will guide you through everything you need to set up and run the application, even if you are not a developer. Please follow the instructions carefully to ensure everything works smoothly.
-
+![MoveOut Project Overview](images/user_flowchart.png)
 
 ## Table of Contents
 1. [Project Overview](#project-overview)
@@ -10,7 +10,7 @@ Welcome to the MoveOut project! This README file will guide you through everythi
 4. [Setting Up MariaDB](#setting-up-mariadb)
 5. [Running the Application](#running-the-application)
 6. [Troubleshooting](#troubleshooting)
-7. [Contact](#contact)
+7. [Licence](#Licence)
 
 ## Project Overview
 MoveOut is an application designed to help users organize and label their moving boxes. The app allows users to create labels, add box content in text, images, or audio, and generate QR codes to access this information easily. It also provides features such as Gmail registration, account management, sharing labels, and a secure admin dashboard.
@@ -178,3 +178,5 @@ The application will be running on `http://localhost:3000/move_out`. You can ope
 
 - **Gmail Authentication Error**: If sending emails fails, ensure that your Gmail account allows less secure apps or set up an app password in your Google account settings.
 
+## LICENCE
+https://github.com/Mohamad-Za/Move-Out-App/blob/master/LICENSE
