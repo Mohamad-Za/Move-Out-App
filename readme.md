@@ -1,7 +1,8 @@
 # MoveOut Project - README
 
 Welcome to the MoveOut project! This README file will guide you through everything you need to set up and run the application, even if you are not a developer. Please follow the instructions carefully to ensure everything works smoothly.
-![MoveOut Project Overview](public\flow_chart\user_flowchart.png)
+![MoveOut Project Overview](./public/flow_chart/user_flowchart.png)
+![ER Diagram](./public/images/design1.png)
 
 ## Table of Contents
 1. [Project Overview](#project-overview)
