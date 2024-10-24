@@ -47,13 +47,13 @@ async function sendVerificationEmail(email, verificationCode) {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'mohammad.zahedi230@gmail.com',
-            pass: 'wodu puji kbuf mqvx' 
+            user: config.gmailUser,
+            pass: config.appPass
         }
     });
 
     const mailOptions = {
-        from: 'mohammad.zahedi230@gmail.com',
+        from: config.gmailUser,
         to: email,
         subject: 'Email Verification',
         html: `<p>Your verification code is: <strong>${verificationCode}</strong></p>
@@ -140,15 +140,15 @@ async function sendDeletionEmail(email, userId) {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'mohammad.zahedi230@gmail.com',
-            pass: 'wodu puji kbuf mqvx' 
+            user: config.gmailUser,
+            pass: config.appPass
         }
     });
 
     const deletionLink = `http://localhost:3000/move_out/delete-account/${userId}`;
 
     const mailOptions = {
-        from: 'mohammad.zahedi230@gmail.com',
+        from: config.gmailUser,
         to: email,
         subject: 'Confirm Account Deletion',
         html: `
@@ -171,13 +171,13 @@ async function sendShareNotificationEmail(email, box_id) {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'mohammad.zahedi230@gmail.com',
-            pass: 'wodu puji kbuf mqvx' 
+            user: config.gmailUser,
+            pass: config.appPass 
         }
     });
 
     const mailOptions = {
-        from: 'mohammad.zahedi230@gmail.com',
+        from: config.gmailUser,
         to: email,
         subject: 'A Label has been Shared with You',
         text: `A label has been shared with you. Click the link below to view it: 
@@ -197,13 +197,13 @@ async function sendPinEmail(email, pin) {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'mohammad.zahedi230@gmail.com',
-            pass: 'wodu puji kbuf mqvx' 
+            user: config.gmailUser,
+            pass: config.appPass 
         }
     });
 
     const mailOptions = {
-        from: 'mohammad.zahedi230@gmail.com',
+        from: config.gmailUser,
         to: email,
         subject: 'Your Box PIN',
         html: `<p>Your private box is protected by a 6-digit PIN. The PIN is: <strong>${pin}</strong></p>`
@@ -296,13 +296,13 @@ async function sendReminderEmail(email) {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'mohammad.zahedi230@gmail.com',
-            pass: 'wodu puji kbuf mqvx' 
+            user: config.gmailUser,
+            pass: config.appPass 
         }
     });
 
     const mailOptions = {
-        from: 'mohammad.zahedi230@gmail.com',
+        from: config.gmailUser,
         to: email,
         subject: 'Account Inactivity Warning',
         html: `<p>Your account has been inactive for almost a month. If you do not log in within the next 7 days, your account will be deactivated.</p>`
@@ -345,9 +345,9 @@ async function sendReminderEmails() {
 
 
 passport.use(new GoogleStrategy({
-    clientID: '734043261353-i60gf4pghmmvivs7pe31e6cvdl9gllck.apps.googleusercontent.com',
-    clientSecret: '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',
-    callbackURL: 'http://localhost:3000/move_out/auth/google/callback' 
+    clientID: config.googleClientID,
+    clientSecret: config.googleClientSecret,
+    callbackURL: config.googleCallbackURL
     },
     async (accessToken, refreshToken, profile, done) => {
         try {
@@ -389,7 +389,6 @@ passport.serializeUser((user, done) => {
 });
 
 
-
 passport.deserializeUser(async (id, done) => {
     const db = await getConnection();
     const user = await db.query('SELECT * FROM users WHERE user_id = ?', [id]);
@@ -412,13 +411,13 @@ async function sendMarketingEmail(subject, content) {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'mohammad.zahedi230@gmail.com',
-                pass: 'wodu puji kbuf mqvx'
+                user: config.gmailUser,
+                pass: config.appPass
             }
         });
 
         const mailOptions = {
-            from: 'mohammad.zahedi230@gmail.com',
+            from: config.gmailUser,
             subject: subject,
             html: content
         };

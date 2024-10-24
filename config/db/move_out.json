@@ -6,7 +6,10 @@
     "multipleStatements": true,
     "connectionLimit": 10,
     "waitForConnections": true,
-    "queueLimit": 0
+    "queueLimit": 0,
+    "gmailUser": "mohammad.zahedi230@gmail.com",
+    "appPass": "wodu puji kbuf mqvx",
+    "googleClientID": "734043261353-i60gf4pghmmvivs7pe31e6cvdl9gllck.apps.googleusercontent.com",
+    "googleClientSecret": "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",
+    "googleCallbackURL": "http://localhost:3000/move_out/auth/google/callback"
 }
-
-
