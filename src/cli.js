@@ -1,7 +1,6 @@
 const config = require("../config/db/move_out.json");
 const mysql = require("promise-mysql");
 const bcrypt = require('bcryptjs');
-const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 
 const passport = require('passport');
@@ -405,7 +404,7 @@ async function sendMarketingEmail(subject, content) {
     try {
         const db = await mysql.createConnection(config);
 
-        const sqlUsers = 'SELECT email FROM users WHERE status = "active"';
+        const sqlUsers = 'SELECT email FROM users WHERE status = "active" AND is_admin = 0';
         const users = await db.query(sqlUsers);
 
         const transporter = nodemailer.createTransport({

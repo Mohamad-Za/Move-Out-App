@@ -63,7 +63,6 @@ CREATE TABLE qr_codes (
 );
 
 
-
 CREATE TABLE shared_labels (
     id INT AUTO_INCREMENT PRIMARY KEY,
     box_id INT NOT NULL,

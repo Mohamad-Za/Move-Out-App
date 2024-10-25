@@ -1,10 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { getConnection, createUser, sendVerificationEmail, authenticateUser, verifyUserCode,
-    createBox, sendDeletionEmail, sendShareNotificationEmail, sendPinEmail, getAllUsers, getPublicBoxesByUser ,
-    saveCustomLabel, getSharedLabelsByEmail, updateLastActivity, sendMarketingEmail, toggleUserStatus, getStorageUsage} = require("./../src/cli.js");
+const { getConnection, createUser, sendVerificationEmail, authenticateUser, verifyUserCode, sendDeletionEmail, sendShareNotificationEmail,
+    sendPinEmail, getAllUsers, getSharedLabelsByEmail, sendMarketingEmail, toggleUserStatus} = require("./../src/cli.js");
 const session = require('express-session');
-const crypto = require('crypto');
 
 const QRCode = require('qrcode');
 const fs = require('fs');
@@ -916,7 +914,6 @@ router.get('/delete-account/:userId', async (req, res) => {
 
         const boxesSql = 'SELECT * FROM boxes WHERE user_id = ?';
         const boxes = await db.query(boxesSql, [userId]);
-        // Fixing box_id to boxId
         for (const box of boxes) {
             const boxId = box.box_id;
 
