@@ -27,8 +27,8 @@ async function createUser(email, password, name) {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        const verificationCode = (Math.floor(10000000 + Math.random() * 90000000)).toString(); // 8-digit code as string
-        const tokenExpiration = Date.now() + 3600000; // 1 hour expiration
+        const verificationCode = (Math.floor(10000000 + Math.random() * 90000000)).toString(); 
+        const tokenExpiration = Date.now() + 3600000; 
 
         const sql = 'INSERT INTO unverified_users (email, password, verification_code, token_expiration, name) VALUES (?, ?, ?, ?, ?)';
         const result = await db.query(sql, [email, hashedPassword, verificationCode, tokenExpiration, name]);

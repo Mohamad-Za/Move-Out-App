@@ -458,14 +458,6 @@ router.post('/create-insurance-box', upload.any(), async (req, res) => {
 });
 
 
-
-
-
-
-
-
-
-
 router.get('/view-boxes', async (req, res) => {
     try {
         const db = await getConnection();

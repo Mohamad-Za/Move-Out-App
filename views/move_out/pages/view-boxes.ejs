@@ -13,7 +13,6 @@
                             <div class="helix-box-header">
                                 <h3 class="helix-box-title"><%= box.box_name %></h3>
                                 
-                                <!-- Show box type (optional) -->
                                 <% if (box.box_type === 'insurance') { %>
                                     <p class="helix-box-type">Insurance Box</p>
                                 <% } else { %>
@@ -82,22 +81,17 @@
             const printWindow = window.open('', '', 'width=800,height=600');
             printWindow.document.write('<html><head><title>Print Box Information</title></head><body>');
             
-            // Add background image using label design
             printWindow.document.write(`<div style="background-image: url('/images/${labelDesign}.jpg'); background-size: cover; padding: 20px;">`);
             
-            // Display Box Name and Type
             printWindow.document.write(`<h1>Box Name: ${boxName}</h1>`);
             printWindow.document.write(`<h2>Box Type: ${boxType}</h2>`);
             
-            // Display QR Code
             printWindow.document.write(`<div><img src="${qrCodeUrl}" alt="QR Code for ${boxName}" style="max-width: 200px;"></div>`);
             
-            // Display Insurance Logo (only if box is of type 'insurance' and logo is provided)
             if (insuranceLogo && boxType === 'insurance') {
                 printWindow.document.write(`<div><img src="${insuranceLogo}" alt="Insurance Logo" style="max-width: 100px;"></div>`);
             }
             
-            // Display Items (only if box is of type 'insurance' and items are provided)
             if (items.length > 0 && boxType === 'insurance') {
                 printWindow.document.write('<ul>');
                 items.forEach(item => {
@@ -106,7 +100,7 @@
                 printWindow.document.write('</ul>');
             }
     
-            printWindow.document.write('</div>');  // Close the background div
+            printWindow.document.write('</div>');  
             printWindow.document.write('</body></html>');
             printWindow.document.close();
             printWindow.print();
