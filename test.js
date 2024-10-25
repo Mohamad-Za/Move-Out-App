@@ -1,5 +1,5 @@
-"generate a hashed password for Admin"
-"Create/add an admin in 'sql\move_out\insert.sql'"
+// generate a hashed password for Admin here
+// Create/add an admin in 'sql\move_out\insert.sql'
 
 const bcrypt = require('bcryptjs');
 
